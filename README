@@ -1,0 +1,21 @@
+Carlos Sanchez <csanchez@maestrodev.com>
+http://www.maestrodev.com
+2011-09-26
+
+A puppet recipe to install Sonar
+
+Usage
+
+class { "sonar" :
+}
+
+- or -
+
+class { "sonar" :
+  version => "2.10",
+  user => "sonar",
+  group => "sonar",
+  service => "sonar",
+  home => "/usr/local",
+  download_url => "http://dist.sonar.codehaus.org/sonar-$version.zip"
+}
