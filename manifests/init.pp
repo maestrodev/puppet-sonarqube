@@ -19,13 +19,13 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
   Exec { path => "/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin" }
   File { owner => $user, group => $group }
 
-	include wget
-	#include sonar::patch # install patch prerequisites
+  # wget from https://github.com/maestrodev/puppet-wget
+  include wget
 
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
   $script = "${home}/${service}/bin/${arch}/sonar.sh"
 
-	user { "$user":
+  user { "$user":
     ensure     => present,
     home       => "$home/$user",
     managehome => false,
