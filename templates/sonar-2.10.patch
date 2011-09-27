@@ -1,0 +1,151 @@
+--- bin/linux-ppc-64/sonar.sh
++++ bin/linux-ppc-64/sonar.sh
+@@ -334,6 +334,7 @@
+         # Still want to change users, recurse.  This means that the user will only be
+         #  prompted for a password once. Variables shifted by 1
+         su -m $RUN_AS_USER -c "\"$REALPATH\" $2"
++        RETVAL=$?
+ 
+         # Now that we are the original user again, we may need to clean up the lock file.
+         if [ "X$LOCKPROP" != "X" ]
+@@ -349,7 +350,7 @@
+             fi
+         fi
+ 
+-        exit 0
++        exit $RETVAL
+     fi
+ }
+ 
+--- bin/linux-x86-32/sonar.sh
++++ bin/linux-x86-32/sonar.sh
+@@ -334,6 +334,7 @@
+         # Still want to change users, recurse.  This means that the user will only be
+         #  prompted for a password once. Variables shifted by 1
+         su -m $RUN_AS_USER -c "\"$REALPATH\" $2"
++        RETVAL=$?
+ 
+         # Now that we are the original user again, we may need to clean up the lock file.
+         if [ "X$LOCKPROP" != "X" ]
+@@ -349,7 +350,7 @@
+             fi
+         fi
+ 
+-        exit 0
++        exit $RETVAL
+     fi
+ }
+ 
+--- bin/linux-x86-64/sonar.sh
++++ bin/linux-x86-64/sonar.sh
+@@ -334,6 +334,7 @@
+         # Still want to change users, recurse.  This means that the user will only be
+         #  prompted for a password once. Variables shifted by 1
+         su -m $RUN_AS_USER -c "\"$REALPATH\" $2"
++        RETVAL=$?
+ 
+         # Now that we are the original user again, we may need to clean up the lock file.
+         if [ "X$LOCKPROP" != "X" ]
+@@ -349,7 +350,7 @@
+             fi
+         fi
+ 
+-        exit 0
++        exit $RETVAL
+     fi
+ }
+ 
+--- bin/macosx-universal-32/sonar.sh
++++ bin/macosx-universal-32/sonar.sh
+@@ -334,6 +334,7 @@
+         # Still want to change users, recurse.  This means that the user will only be
+         #  prompted for a password once. Variables shifted by 1
+         su -m $RUN_AS_USER -c "\"$REALPATH\" $2"
++        RETVAL=$?
+ 
+         # Now that we are the original user again, we may need to clean up the lock file.
+         if [ "X$LOCKPROP" != "X" ]
+@@ -349,7 +350,7 @@
+             fi
+         fi
+ 
+-        exit 0
++        exit $RETVAL
+     fi
+ }
+ 
+--- bin/macosx-universal-64/sonar.sh
++++ bin/macosx-universal-64/sonar.sh
+@@ -334,6 +334,7 @@
+         # Still want to change users, recurse.  This means that the user will only be
+         #  prompted for a password once. Variables shifted by 1
+         su -m $RUN_AS_USER -c "\"$REALPATH\" $2"
++        RETVAL=$?
+ 
+         # Now that we are the original user again, we may need to clean up the lock file.
+         if [ "X$LOCKPROP" != "X" ]
+@@ -349,7 +350,7 @@
+             fi
+         fi
+ 
+-        exit 0
++        exit $RETVAL
+     fi
+ }
+ 
+--- bin/solaris-sparc-32/sonar.sh
++++ bin/solaris-sparc-32/sonar.sh
+@@ -335,6 +335,7 @@
+         # Still want to change users, recurse.  This means that the user will only be
+         #  prompted for a password once. Variables shifted by 1
+         su -m $RUN_AS_USER -c "\"$REALPATH\" $2"
++        RETVAL=$?
+ 
+         # Now that we are the original user again, we may need to clean up the lock file.
+         if [ "X$LOCKPROP" != "X" ]
+@@ -350,7 +351,7 @@
+             fi
+         fi
+ 
+-        exit 0
++        exit $RETVAL
+     fi
+ }
+ 
+--- bin/solaris-sparc-64/sonar.sh
++++ bin/solaris-sparc-64/sonar.sh
+@@ -335,6 +335,7 @@
+         # Still want to change users, recurse.  This means that the user will only be
+         #  prompted for a password once. Variables shifted by 1
+         su -m $RUN_AS_USER -c "\"$REALPATH\" $2"
++        RETVAL=$?
+ 
+         # Now that we are the original user again, we may need to clean up the lock file.
+         if [ "X$LOCKPROP" != "X" ]
+@@ -350,7 +351,7 @@
+             fi
+         fi
+ 
+-        exit 0
++        exit $RETVAL
+     fi
+ }
+ 
+--- bin/solaris-x86-32/sonar.sh
++++ bin/solaris-x86-32/sonar.sh
+@@ -334,6 +334,7 @@
+         # Still want to change users, recurse.  This means that the user will only be
+         #  prompted for a password once. Variables shifted by 1
+         sudo -u $RUN_AS_USER "$REALPATH" "$2"
++        RETVAL=$?
+ 
+         # Now that we are the original user again, we may need to clean up the lock file.
+         if [ "X$LOCKPROP" != "X" ]
+@@ -349,7 +350,7 @@
+             fi
+         fi
+ 
+-        exit 0
++        exit $RETVAL
+     fi
+ }

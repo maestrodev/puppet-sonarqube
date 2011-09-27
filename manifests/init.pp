@@ -1,18 +1,20 @@
-Exec { path => "/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin" }
-
 class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "sonar",
   $home = "/usr/local", $download_url = "http://dist.sonar.codehaus.org/sonar-$version.zip",
   $arch = "linux-x86-64" ) {
 
+  Exec { path => "/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin" }
+  File { owner => $user, group => $group }
+
 	include wget
+	#include sonar::patch # install patch prerequisites
 
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
+  $script = "${home}/${service}/bin/${arch}/sonar.sh"
 
 	user { "$user":
     ensure     => present,
     home       => "$home/$user",
     managehome => false,
-    shell      => "/bin/false",
   } ->
   group { "$group":
     ensure  => present,
@@ -29,17 +31,27 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
   } ->
   file { "${home}/${service}":
     ensure => link,
-    target => "$home/sonar-$version",
+    target => "${home}/sonar-${version}",
   } ->
-  # TODO set RUN_AS_USER=${user}
-  file { "${home}/${service}/bin/${service}":
-    ensure  => link,
-    target  => "${home}/${service}/bin/${arch}/sonar.sh",
+  exec { "run_as_user":
+    command => "mv ${script} ${script}.bak && sed -e 's/#RUN_AS_USER=/RUN_AS_USER=${user}/' ${script}.bak > ${script}",
+    unless  => "grep RUN_AS_USER=${user} ${script}",
+  } ->
+  file { $script:
+    mode => 755,
   } ->
   file { "/etc/init.d/${service}":
     ensure  => link,
-    target  => "${home}/${service}/bin/${service}",
+    target  => $script,
   } ->
+
+  # we need to patch the init.d scripts until fixed in Sonar
+  # https://github.com/SonarSource/sonar/pull/15
+  patch { "initd" :
+    cwd => "${home}/${service}",
+    patch => template("sonar/sonar-${version}.patch"),
+  } ->
+
   service { $service:
     name => $service,
     ensure => running,
@@ -47,4 +59,5 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
     hasstatus => true,
     enable => true,
   }
+
 }
