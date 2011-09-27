@@ -18,7 +18,7 @@ define patch($cwd = '.', $patch, $fuzz = 2) {
     ensure => installed,
   }
 
-  $patch_file = "/tmp/patch_${name}.patch"
+  $patch_file = "${cwd}/patch_${name}.patch"
   file { $patch_file:
     content => $patch,
   } ->
