@@ -13,7 +13,8 @@
 # limitations under the License.
 
 class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "sonar",
-  $home = "/usr/local", $download_url = "http://dist.sonar.codehaus.org/sonar-$version.zip",
+  $install_dir = "/usr/local", $home = "/var/${service}",
+  $download_url = "http://dist.sonar.codehaus.org/sonar-$version.zip",
   $arch = "linux-x86-64" ) {
 
   Exec { path => "/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin" }
@@ -23,16 +24,15 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
   include wget
 
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
-  $script = "${home}/${service}/bin/${arch}/sonar.sh"
+  $script = "${install_dir}/${service}/bin/${arch}/sonar.sh"
 
   user { "$user":
     ensure     => present,
-    home       => "$home/$user",
+    home       => $home,
     managehome => false,
   } ->
   group { "$group":
     ensure  => present,
-    require => User["$user"],
   } ->
   wget::fetch { "download":
     source => $download_url,
@@ -40,12 +40,12 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
     timeout => 60,
   } ->
   exec { "untar":
-    command => "unzip ${tmpzip} -d ${home} && chown -R ${user}:${group} ${home}/sonar-${version}",
-    creates => "${home}/sonar-${version}",
+    command => "unzip ${tmpzip} -d ${install_dir} && chown -R ${user}:${group} ${install_dir}/sonar-${version}",
+    creates => "${install_dir}/sonar-${version}",
   } ->
-  file { "${home}/${service}":
+  file { "${install_dir}/${service}":
     ensure => link,
-    target => "${home}/sonar-${version}",
+    target => "${install_dir}/sonar-${version}",
   } ->
   exec { "run_as_user":
     command => "mv ${script} ${script}.bak && sed -e 's/#RUN_AS_USER=/RUN_AS_USER=${user}/' ${script}.bak > ${script}",
@@ -62,7 +62,7 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
   # we need to patch the init.d scripts until fixed in Sonar
   # https://github.com/SonarSource/sonar/pull/15
   patch { "initd" :
-    cwd => "${home}/${service}",
+    cwd => "${install_dir}/${service}",
     patch => template("sonar/sonar-${version}.patch"),
   } ->
 
