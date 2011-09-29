@@ -86,10 +86,15 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
   move_to_home { "data": } ->
   move_to_home { "extras": } ->
   move_to_home { "extensions": } ->
+  move_to_home { "logs": } ->
 
-  # Sonar properties file
+  # Sonar configuration files
   file { "${install_dir}/${service}/conf/sonar.properties":
     content => template("sonar/sonar.properties.erb"),
+    notify => Service[$service],
+  } ->
+  file { "${install_dir}/${service}/conf/logback.xml":
+    content => template("sonar/logback.xml.erb"),
     notify => Service[$service],
   } ->
 
