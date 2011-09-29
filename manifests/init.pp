@@ -20,8 +20,8 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
     url => "jdbc:derby://localhost:1527/sonar;create=true",
     driver_class_name => "org.apache.derby.jdbc.ClientDriver",
     validation_query => "values(1)",
-    username => $user,
-    password => $user,
+    username => "sonar",
+    password => "sonar",
   },
   $log_folder = "/var/sonar/logs", $profile = false) {
 
@@ -34,9 +34,14 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
   $script = "${install_dir}/${service}/bin/${arch}/sonar.sh"
 
+  # move folders susceptible to change from installation folder to /var/sonar and symlink
   define move_to_home() {
     exec { "mv ${sonar::install_dir}/${sonar::service}/${name} ${sonar::home}":
       creates => "${sonar::home}/${name}",
+    } ->
+    file { "${sonar::install_dir}/${sonar::service}/${name}":
+      ensure => link,
+      target => "${sonar::home}/${name}",
     }
   }
 
