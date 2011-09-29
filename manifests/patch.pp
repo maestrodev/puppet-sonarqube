@@ -12,13 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Class: patch
+#
+# A puppet definition for patch
+#
+# Parameters:
+#   - $cwd:
+#         directory where patch is saved and applied.
+#   - $patch:
+#         patch contents.
+#   - $fuzz:
+#         fuzz factor.
+#
+# Sample Usage:
+# patch { "mypatch":
+#   cwd => "/tmp",
+#   patch => template("patch"),
+# }
+#
 define patch($cwd = '.', $patch, $fuzz = 2) {
+
+  $patch_file = "${cwd}/patch_${name}.patch"
 
   package { "patch":
     ensure => installed,
-  }
+  } ->
 
-  $patch_file = "${cwd}/patch_${name}.patch"
   file { $patch_file:
     content => $patch,
   } ->
