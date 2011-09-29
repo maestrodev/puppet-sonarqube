@@ -19,6 +19,11 @@ http://www.maestrodev.com
 
 A puppet recipe to install Sonar
 
+Module requirements
+
+*  wget => https://github.com/maestrodev/puppet-wget
+
+
 Usage
 
 class { "sonar" :
