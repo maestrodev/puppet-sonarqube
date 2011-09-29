@@ -13,7 +13,7 @@
 # limitations under the License.
 
 class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "sonar",
-  $install_dir = "/usr/local", $home = "/var/sonar",
+  $install_dir = "/usr/local", $home = "/var/sonar", $port = 9000,
   $download_url = "http://dist.sonar.codehaus.org/sonar-${version}.zip",
   $arch = "linux-x86-64", $ldap = {},
   $jdbc = {
