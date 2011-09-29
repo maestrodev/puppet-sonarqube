@@ -31,12 +31,22 @@ class { "sonar" :
 
 - or -
 
+$jdbc = {
+  url => "jdbc:derby://localhost:1527/sonar;create=true",
+  driver_class_name => "org.apache.derby.jdbc.ClientDriver",
+  validation_query => "values(1)",
+  username => "sonar",
+  password => "sonar",
+}
+
 class { "sonar" :
+  arch => "linux-x86-64",
   version => "2.10",
   user => "sonar",
   group => "sonar",
   service => "sonar",
   install_dir => "/usr/local",
   home => "/var/sonar",
-  download_url => "http://dist.sonar.codehaus.org/sonar-$version.zip"
+  download_url => "http://dist.sonar.codehaus.org/sonar-2.10.zip"
+  jdbc => $jdbc,
 }
