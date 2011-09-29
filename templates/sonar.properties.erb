@@ -1,0 +1,205 @@
+#--------------------------------------------------------
+# To use an environment variable, use the following syntax :  ${env:NAME_OF_ENV_VARIABLE}
+# For example :
+#   sonar.jdbc.url: ${env:SONAR_JDBC_URL}
+#
+#
+# See also the file conf/wrapper.conf for JVM advanced settings
+#---------------------------------------------------------
+
+sonar.home: <%=home%>
+
+#---------------------------------------------------------
+# WEB SETTINGS - STANDALONE MODE ONLY
+# These settings are ignored when the war file is deployed to a JEE server.
+#---------------------------------------------------------
+# Listen host/port and context path (for example / or /sonar). Default values are 0.0.0.0:9000/.
+#sonar.web.host:                           0.0.0.0
+#sonar.web.port:                           9000
+#sonar.web.context:                        /
+
+# Log HTTP requests. Deactivated by default.
+#sonar.web.jettyRequestLogs: ../../logs/jetty-yyyy_mm_dd.request.log
+
+# Apache mod_jk connector. Supported only in standalone mode. 
+# Uncomment to activate AJP13 connector. 
+#sonar.ajp13.port: 8009
+
+
+#---------------------------------------------------------
+# DATABASE
+#
+# IMPORTANT : the embedded database Derby is used by default. 
+# It is recommended for tests only. Please use an other database
+# for production environment (MySQL, Oracle, Postgresql, 
+# SQLServer)
+#
+#---------------------------------------------------------
+
+<% if !jdbc.empty? -%>
+
+sonar.jdbc.url:                            <%=jdbc['url']%>
+sonar.jdbc.driverClassName:                <%=jdbc['driver_class_name']%>
+sonar.jdbc.validationQuery:                <%=jdbc['validation_query']%>
+
+#----- Embedded database Derby
+# Note : it does accept connections from remote hosts, so the 
+# sonar server and the maven plugin must be executed on the same host.
+
+# Comment the 3 following lines to deactivate the default embedded database
+# sonar.jdbc.url:                            jdbc:derby://localhost:1527/sonar;create=true
+# sonar.jdbc.driverClassName:                org.apache.derby.jdbc.ClientDriver
+# sonar.jdbc.validationQuery:                values(1)
+# directory containing Derby database files. By default it's the /data directory in the sonar installation.
+#sonar.embeddedDatabase.dataDir:
+# derby embedded database server listening port, defaults to 1527
+#sonar.derby.drda.portNumber:               1527
+
+# uncomment to accept connections from remote hosts. Ba default it only accepts localhost connections.
+#sonar.derby.drda.host: 0.0.0.0
+
+#----- MySQL 5.x/6.x
+# Comment the embedded database and uncomment the following lines to use MySQL
+#sonar.jdbc.url:                            jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8
+#sonar.jdbc.driverClassName:                com.mysql.jdbc.Driver
+#sonar.jdbc.validationQuery:                select 1
+
+
+#----- Oracle 10g/11g
+# Comment the embedded database and uncomment the following lines to use Oracle
+#sonar.jdbc.url:                            jdbc:oracle:thin:@localhost/XE
+#sonar.jdbc.driverClassName:                oracle.jdbc.driver.OracleDriver
+#sonar.jdbc.validationQuery:                select 1 from dual
+
+# Activate if more than one Sonar Oracle schemas on the data server (for example different versions installed).
+# In that case, use the same property during maven analysis (-Dsonar.hibernate.default_schema=xxx)
+#sonar.hibernate.default_schema:            sonar
+
+#----- PostgreSQL 8.x
+# uncomment the 3 following lines to use PostgreSQL
+#sonar.jdbc.url:                            jdbc:postgresql://localhost/sonar
+#sonar.jdbc.driverClassName:                org.postgresql.Driver
+#sonar.jdbc.validationQuery:                select 1
+
+
+#----- Microsoft SQLServer
+# The Jtds open source driver is available in extensions/jdbc-driver/mssql. More details on http://jtds.sourceforge.net
+#sonar.jdbc.url:                            jdbc:jtds:sqlserver://localhost;databaseName=SONAR;SelectMethod=Cursor
+#sonar.jdbc.driverClassName:                net.sourceforge.jtds.jdbc.Driver
+#sonar.jdbc.validationQuery:                select 1  
+
+
+#----- Global database settings
+sonar.jdbc.username:                       <%=jdbc['username']%>
+sonar.jdbc.password:                       <%=jdbc['password']%>
+sonar.jdbc.maxActive:                      10
+sonar.jdbc.maxIdle:                        5
+sonar.jdbc.minIdle:                        2
+sonar.jdbc.maxWait:                        5000
+sonar.jdbc.minEvictableIdleTimeMillis:     600000
+sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
+
+# Transaction isolation level. Default driver setting is used by default.
+# Values : 1 (TRANSACTION_READ_UNCOMMITED), 2 (TRANSACTION_READ_COMMITTED), 4 (TRANSACTION_REPEATABLE_READ), 8 (TRANSACTION_SERIALIZABLE)
+#sonar.jdbc.defaultTransactionIsolation: 2
+
+<% end -%>
+
+
+# When packaged in a WAR, JDBC datasource can be configured into the application server then registered to JNDI.
+# In such a case Sonar uses this datasource to connect to database, else if binds itself its own datasource.
+# Note : Jonas does not accept to bind subcontexts, so name should be something like 'jdbc-sonar', without slashes.
+#sonar.jdbc.jndiName:                       jdbc/sonar
+
+# If you don't use the default JDBC drivers, as listed above, then you have to explicitly set the dialect to use.
+# Values are : mysql, derby, oracle, postgresql
+#sonar.jdbc.dialect=
+
+
+#---------------------------------------------------------
+# UPDATE CENTER
+#---------------------------------------------------------
+
+# The Update Center requires an internet connection to request http://update.sonarsource.org
+# It is activated by default:
+#sonar.updatecenter.activate=true
+
+# HTTP proxy (default none)
+#http.proxyHost=
+#http.proxyPort=
+
+# NT domain name if NTLM proxy is used
+#http.auth.ntlm.domain=
+
+# SOCKS proxy (default none)
+#socksProxyHost=
+#socksProxyPort=
+
+# proxy authentication. The 2 following properties are used for HTTP and SOCKS proxies.
+#http.proxyUser=
+#http.proxyPassword=
+
+
+<% if !ldap.empty? %>
+
+#-------------------
+# Sonar LDAP Plugin
+#-------------------
+
+# IMPORTANT : before activation, make sure that one Sonar administrator is defined in the external system
+# Activates the plugin. Leave blank or comment out to use default sonar authentication.
+sonar.authenticator.class: org.sonar.plugins.ldap.LdapAuthenticator
+
+# Ignore failure at startup if the connection to external system is refused.
+# Users can browse sonar but not log in as long as the connection fails.
+# When set to true, Sonar will not start if connection to external system fails.
+# Default is false.
+#sonar.authenticator.ignoreStartupFailure: true
+
+# Automatically create users (available since Sonar 2.0).
+# When set to true, user will be created after successful authentication, if doesn't exists.
+# The default group affected to new users can be defined online, in Sonar general settings. The default value is "sonar-users".
+# Default is false.
+sonar.authenticator.createUsers: true
+
+# (omit if you use autodiscovery) URL of the LDAP server.
+# If you are using ldaps, then you should install server certificate into java truststore.
+# eg. ldap://localhost:10389
+ldap.url: ldap<%= "s" if ldap['ssl'] %>://<%=ldap['hostname']%>:<%=ldap['port']%>
+
+# (optional) Distinguished Name (DN) of the root node in LDAP from which to search for users,
+# eg. "ou=users,o=mycompany"
+ldap.baseDn: <%=ldap['dn']%>
+
+# (optional) Bind DN is the username of an LDAP user to connect (or bind) with.
+# This is a Distinguished Name of a user who has administrative rights,
+# eg. "cn=sonar,ou=users,o=mycompany". Leave blank for anonymous access to the LDAP directory.
+ldap.bindDn: <%=ldap['bind_dn']%>
+
+# (optional) Bind Password is the password of the user to connect with.
+# Leave blank for anonymous access to the LDAP directory.
+ldap.bindPassword: <%=ldap['bind_password']%>
+
+# Login Attribute is the attribute in LDAP holding the user's login.
+# Default is 'uid'. Set 'sAMAccountName' for Microsoft Active Directory
+#ldap.loginAttribute: sAMAccountName
+
+# Object class of LDAP users.
+# Default is 'inetOrgPerson'. Set 'user' for Microsoft Active Directory.
+#ldap.userObjectClass: user
+
+# (advanced option) See http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html
+# Default is 'simple'. Possible values: 'simple', 'CRAM-MD5', 'DIGEST-MD5', 'GSSAPI'.
+#ldap.authentication: DIGEST-MD5
+
+# (advanced option)
+# See
+# http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html
+# http://java.sun.com/products/jndi/tutorial/ldap/security/crammd5.html
+# eg. example.org
+#ldap.realm:
+
+# (advanced option) Context factory class.
+# Default is 'com.sun.jndi.ldap.LdapCtxFactory'.
+#ldap.contextFactoryClass: com.sun.jndi.ldap.LdapCtxFactory
+<% end %>
