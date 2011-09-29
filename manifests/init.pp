@@ -13,8 +13,8 @@
 # limitations under the License.
 
 class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "sonar",
-  $install_dir = "/usr/local", $home = "/var/${service}",
-  $download_url = "http://dist.sonar.codehaus.org/sonar-$version.zip",
+  $install_dir = "/usr/local", $home = "/var/sonar",
+  $download_url = "http://dist.sonar.codehaus.org/sonar-${version}.zip",
   $arch = "linux-x86-64", $ldap = {},
   $jdbc = {
     url => "jdbc:derby://localhost:1527/sonar;create=true",
@@ -22,7 +22,8 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
     validation_query => "values(1)",
     username => $user,
     password => $user,
-  }) {
+  },
+  $log_folder = "/var/sonar/logs", $profile = false) {
 
   Exec { path => "/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin" }
   File { owner => $user, group => $group }
