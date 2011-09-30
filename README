@@ -27,6 +27,7 @@ Module requirements
 Usage
 
 class { "sonar" :
+  version => "2.10",
 }
 
 - or -
