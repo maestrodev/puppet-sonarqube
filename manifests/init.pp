@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "sonar",
+class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   $install_dir = "/usr/local", $home = "/var/sonar", $port = 9000,
-  $download_url = "http://dist.sonar.codehaus.org/sonar-${version}.zip",
+  $download_url = "http://dist.sonar.codehaus.org",
   $arch = "linux-x86-64", $ldap = {},
   $jdbc = {
     url => "jdbc:derby://localhost:1527/sonar;create=true",
@@ -54,7 +54,7 @@ class sonar( $version = "2.10", $user = "sonar", $group = "sonar", $service = "s
     ensure  => present,
   } ->
   wget::fetch { "download":
-    source => $download_url,
+    source => "${download_url}/sonar-${version}.zip",
     destination => $tmpzip,
   } ->
   exec { "untar":

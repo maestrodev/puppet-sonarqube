@@ -47,6 +47,6 @@ class { "sonar" :
   service => "sonar",
   install_dir => "/usr/local",
   home => "/var/sonar",
-  download_url => "http://dist.sonar.codehaus.org/sonar-2.10.zip"
+  download_url => "http://dist.sonar.codehaus.org"
   jdbc => $jdbc,
 }
