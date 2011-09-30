@@ -13,7 +13,7 @@
 # limitations under the License.
 
 class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
-  $install_dir = "/usr/local", $home = "/var/sonar", $port = 9000,
+  $install_dir = "/usr/local", $home = "/var/local/sonar", $port = 9000,
   $download_url = "http://dist.sonar.codehaus.org",
   $arch = "linux-x86-64", $ldap = {},
   $jdbc = {
@@ -23,7 +23,7 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
     username => "sonar",
     password => "sonar",
   },
-  $log_folder = "/var/sonar/logs", $profile = false) {
+  $log_folder = "/var/local/sonar/logs", $profile = false) {
 
   Exec { path => "/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin" }
   File { owner => $user, group => $group }
@@ -34,7 +34,7 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
   $script = "${install_dir}/${service}/bin/${arch}/sonar.sh"
 
-  # move folders susceptible to change from installation folder to /var/sonar and symlink
+  # move folders susceptible to change from installation folder to /var/local/sonar and symlink
   define move_to_home() {
     exec { "mv ${sonar::install_dir}/${sonar::service}/${name} ${sonar::home}":
       creates => "${sonar::home}/${name}",

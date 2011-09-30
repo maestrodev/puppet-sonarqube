@@ -46,7 +46,8 @@ class { "sonar" :
   group => "sonar",
   service => "sonar",
   install_dir => "/usr/local",
-  home => "/var/sonar",
+  home => "/var/local/sonar",
   download_url => "http://dist.sonar.codehaus.org"
   jdbc => $jdbc,
+  log_folder => "/var/local/sonar/logs",
 }
