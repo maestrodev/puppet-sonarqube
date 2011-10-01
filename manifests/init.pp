@@ -15,7 +15,7 @@
 class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   $installroot = "/usr/local", $home = "/var/local/sonar", $port = 9000,
   $download_url = "http://dist.sonar.codehaus.org",
-  $arch = "linux-x86-64", $ldap = {},
+  $arch = "", $ldap = {},
   $jdbc = {
     url => "jdbc:derby://localhost:1527/sonar;create=true",
     driver_class_name => "org.apache.derby.jdbc.ClientDriver",
@@ -31,9 +31,29 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   # wget from https://github.com/maestrodev/puppet-wget
   include wget
 
+  # calculate in what folder is the binary to use for this architecture
+  $arch1 = $::kernel ? {
+    "windows" => "windows",
+    "sunos" => "solaris",
+    "darwin" => "macosx",
+    default  => "linux",
+  }
+  if $arch1 != "macosx" {
+    $arch2 = $::architecture ? {
+      "x86_64" => "x86-64",
+      default  => "x86-32",
+    }
+  } else {
+    $arch2 = $::architecture ? {
+      "x86_64" => "universal-64",
+      default  => "universal-32",
+    }
+  }
+  $bin_folder = $arch ? { "" => "${arch1}-${arch2}", default => $arch }
+
   $installdir = "${installroot}/${service}"
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
-  $script = "${installdir}/bin/${arch}/sonar.sh"
+  $script = "${installdir}/bin/${bin_folder}/sonar.sh"
 
   # move folders susceptible to change from installation folder to /var/local/sonar and symlink
   define move_to_home() {
