@@ -13,7 +13,7 @@
 # limitations under the License.
 
 class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
-  $install_dir = "/usr/local", $home = "/var/local/sonar", $port = 9000,
+  $installroot = "/usr/local", $home = "/var/local/sonar", $port = 9000,
   $download_url = "http://dist.sonar.codehaus.org",
   $arch = "linux-x86-64", $ldap = {},
   $jdbc = {
@@ -31,15 +31,16 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   # wget from https://github.com/maestrodev/puppet-wget
   include wget
 
+  $installdir = "${installroot}/${service}"
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
-  $script = "${install_dir}/${service}/bin/${arch}/sonar.sh"
+  $script = "${installdir}/bin/${arch}/sonar.sh"
 
   # move folders susceptible to change from installation folder to /var/local/sonar and symlink
   define move_to_home() {
-    exec { "mv ${sonar::install_dir}/${sonar::service}/${name} ${sonar::home}":
+    exec { "mv ${sonar::installdir}/${name} ${sonar::home}":
       creates => "${sonar::home}/${name}",
     } ->
-    file { "${sonar::install_dir}/${sonar::service}/${name}":
+    file { "${sonar::installdir}/${name}":
       ensure => link,
       target => "${sonar::home}/${name}",
     }
@@ -58,12 +59,12 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
     destination => $tmpzip,
   } ->
   exec { "untar":
-    command => "unzip ${tmpzip} -d ${install_dir} && chown -R ${user}:${group} ${install_dir}/sonar-${version}",
-    creates => "${install_dir}/sonar-${version}",
+    command => "unzip ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/sonar-${version}",
+    creates => "${installroot}/sonar-${version}",
   } ->
-  file { "${install_dir}/${service}":
+  file { $installdir:
     ensure => link,
-    target => "${install_dir}/sonar-${version}",
+    target => "${installroot}/sonar-${version}",
   } ->
   exec { "run_as_user":
     command => "mv ${script} ${script}.bak && sed -e 's/#RUN_AS_USER=/RUN_AS_USER=${user}/' ${script}.bak > ${script}",
@@ -80,7 +81,7 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   # we need to patch the init.d scripts until Sonar 2.12
   # https://github.com/SonarSource/sonar/pull/15
   patch { "initd":
-    cwd => "${install_dir}/${service}",
+    cwd => $installdir,
     patch => template("sonar/sonar-${version}.patch"),
   } ->
 
@@ -95,11 +96,11 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   move_to_home { "logs": } ->
 
   # Sonar configuration files
-  file { "${install_dir}/${service}/conf/sonar.properties":
+  file { "${installdir}/conf/sonar.properties":
     content => template("sonar/sonar.properties.erb"),
     notify => Service[$service],
   } ->
-  file { "${install_dir}/${service}/conf/logback.xml":
+  file { "${installdir}/conf/logback.xml":
     content => template("sonar/logback.xml.erb"),
     notify => Service[$service],
   } ->
