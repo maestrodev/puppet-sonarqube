@@ -27,7 +27,7 @@ Module requirements
 Usage
 
 class { "sonar" :
-  version => "2.10",
+  version => "2.11",
 }
 
 - or -
@@ -42,7 +42,7 @@ $jdbc = {
 
 class { "sonar" :
   arch => "linux-x86-64",
-  version => "2.10",
+  version => "2.11",
   user => "sonar",
   group => "sonar",
   service => "sonar",

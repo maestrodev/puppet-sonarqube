@@ -7,7 +7,6 @@
 # See also the file conf/wrapper.conf for JVM advanced settings
 #---------------------------------------------------------
 
-sonar.home: <%=installdir%>
 
 #---------------------------------------------------------
 # WEB SETTINGS - STANDALONE MODE ONLY
@@ -26,30 +25,35 @@ sonar.web.port:                           <%=port%>
 #sonar.ajp13.port: 8009
 
 
-#---------------------------------------------------------
+#-----------------------------------------------------------------------
 # DATABASE
 #
 # IMPORTANT : the embedded database Derby is used by default. 
-# It is recommended for tests only. Please use an other database
-# for production environment (MySQL, Oracle, Postgresql, 
-# SQLServer)
+# It is recommended for tests only. Please use an external database
+# for production environment (MySQL, Oracle, Postgresql, SQLServer)
 #
-#---------------------------------------------------------
+#-----------------------------------------------------------------------
 
 <% if !jdbc.empty? -%>
+
+#----- Credentials
+# Permissions to create tables and indexes must be granted to JDBC user.
+# The schema must be created first.
+sonar.jdbc.username:                       <%=jdbc['username']%>
+sonar.jdbc.password:                       <%=jdbc['password']%>
 
 sonar.jdbc.url:                            <%=jdbc['url']%>
 sonar.jdbc.driverClassName:                <%=jdbc['driver_class_name']%>
 sonar.jdbc.validationQuery:                <%=jdbc['validation_query']%>
 
 #----- Embedded database Derby
-# Note : it does accept connections from remote hosts, so the 
+# Note : it does accept connections from remote hosts, so the
 # sonar server and the maven plugin must be executed on the same host.
 
 # Comment the 3 following lines to deactivate the default embedded database
-# sonar.jdbc.url:                            jdbc:derby://localhost:1527/sonar;create=true
-# sonar.jdbc.driverClassName:                org.apache.derby.jdbc.ClientDriver
-# sonar.jdbc.validationQuery:                values(1)
+#sonar.jdbc.url:                            jdbc:derby://localhost:1527/sonar;create=true
+#sonar.jdbc.driverClassName:                org.apache.derby.jdbc.ClientDriver
+#sonar.jdbc.validationQuery:                values(1)
 # directory containing Derby database files. By default it's the /data directory in the sonar installation.
 #sonar.embeddedDatabase.dataDir:
 # derby embedded database server listening port, defaults to 1527
@@ -59,62 +63,56 @@ sonar.jdbc.validationQuery:                <%=jdbc['validation_query']%>
 #sonar.derby.drda.host: 0.0.0.0
 
 #----- MySQL 5.x/6.x
-# Comment the embedded database and uncomment the following lines to use MySQL
+# Comment the embedded database and uncomment the following properties to use MySQL. The validation query is optional.
 #sonar.jdbc.url:                            jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8
 #sonar.jdbc.driverClassName:                com.mysql.jdbc.Driver
 #sonar.jdbc.validationQuery:                select 1
 
 
 #----- Oracle 10g/11g
-# Comment the embedded database and uncomment the following lines to use Oracle
+# To connect to Oracle database :
+#
+# - It's recommended to use the latest version of the JDBC driver (either ojdbc6.jar for Java 6 or ojdbc5.jar for Java 5).
+#   Download it in http://www.oracle.com/technetwork/database/enterprise-edition/jdbc-112010-090769.html
+# - Copy the driver to the directory extensions/jdbc-driver/oracle/
+# - Comment the embedded database and uncomment the following properties. The validation query is optional.
+#
 #sonar.jdbc.url:                            jdbc:oracle:thin:@localhost/XE
 #sonar.jdbc.driverClassName:                oracle.jdbc.driver.OracleDriver
 #sonar.jdbc.validationQuery:                select 1 from dual
 
-# Activate if more than one Sonar Oracle schemas on the data server (for example different versions installed).
-# In that case, use the same property during maven analysis (-Dsonar.hibernate.default_schema=xxx)
+# Uncomment the following property if multiple Sonar schemas are installed on the same server 
+# (for example with different versions).
+# In that case, use the same property during project analysis (-Dsonar.hibernate.default_schema=<schema>)
 #sonar.hibernate.default_schema:            sonar
 
-#----- PostgreSQL 8.x
-# uncomment the 3 following lines to use PostgreSQL
+#----- PostgreSQL 8.x, 9.x
+# Uncomment the following properties to use PostgreSQL. The validation query is optional.
 #sonar.jdbc.url:                            jdbc:postgresql://localhost/sonar
 #sonar.jdbc.driverClassName:                org.postgresql.Driver
 #sonar.jdbc.validationQuery:                select 1
 
+# If the PostgreSql database contains several schemas, the following property must define the schema to be used
+#sonar.jdbc.postgreSearchPath:              public
+
 
 #----- Microsoft SQLServer
 # The Jtds open source driver is available in extensions/jdbc-driver/mssql. More details on http://jtds.sourceforge.net
+# The validation query is optional.
 #sonar.jdbc.url:                            jdbc:jtds:sqlserver://localhost;databaseName=SONAR;SelectMethod=Cursor
 #sonar.jdbc.driverClassName:                net.sourceforge.jtds.jdbc.Driver
 #sonar.jdbc.validationQuery:                select 1  
 
 
-#----- Global database settings
-sonar.jdbc.username:                       <%=jdbc['username']%>
-sonar.jdbc.password:                       <%=jdbc['password']%>
-sonar.jdbc.maxActive:                      10
+#----- Connection pool settings
+sonar.jdbc.maxActive:                      20
 sonar.jdbc.maxIdle:                        5
 sonar.jdbc.minIdle:                        2
 sonar.jdbc.maxWait:                        5000
 sonar.jdbc.minEvictableIdleTimeMillis:     600000
 sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
 
-# Transaction isolation level. Default driver setting is used by default.
-# Values : 1 (TRANSACTION_READ_UNCOMMITED), 2 (TRANSACTION_READ_COMMITTED), 4 (TRANSACTION_REPEATABLE_READ), 8 (TRANSACTION_SERIALIZABLE)
-#sonar.jdbc.defaultTransactionIsolation: 2
-
 <% end -%>
-
-
-# When packaged in a WAR, JDBC datasource can be configured into the application server then registered to JNDI.
-# In such a case Sonar uses this datasource to connect to database, else if binds itself its own datasource.
-# Note : Jonas does not accept to bind subcontexts, so name should be something like 'jdbc-sonar', without slashes.
-#sonar.jdbc.jndiName:                       jdbc/sonar
-
-# If you don't use the default JDBC drivers, as listed above, then you have to explicitly set the dialect to use.
-# Values are : mysql, derby, oracle, postgresql
-#sonar.jdbc.dialect=
-
 
 #---------------------------------------------------------
 # UPDATE CENTER
@@ -138,6 +136,13 @@ sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
 # proxy authentication. The 2 following properties are used for HTTP and SOCKS proxies.
 #http.proxyUser=
 #http.proxyPassword=
+
+#---------------------------------------------------------
+# NOTIFICATIONS
+#---------------------------------------------------------
+
+# Delay (in seconds) between processing of notification queue
+sonar.notifications.delay=60
 
 
 <% if !ldap.empty? %>
