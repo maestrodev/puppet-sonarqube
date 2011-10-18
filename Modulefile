@@ -1,0 +1,11 @@
+name 'maestrodev-sonar'
+version '0.0.1'
+
+author 'maestrodev'
+license 'Apache License, Version 2.0'
+project_page 'http://github.com/maestrodev/puppet-sonar'
+source 'http://github.com/maestrodev/puppet-sonar'
+summary 'Sonar module for Puppet'
+description 'A Puppet module to install and configure Sonar'
+dependency 'maestrodev/wget', '~0.0.1'
+dependency 'maestrodev/maven', '~0.0.1'
