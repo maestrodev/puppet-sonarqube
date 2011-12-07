@@ -96,14 +96,18 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   file { "/etc/init.d/${service}":
     ensure  => link,
     target  => $script,
-  } ->
+  }
 
   # we need to patch the init.d scripts until Sonar 2.12
   # https://github.com/SonarSource/sonar/pull/15
-  patch { "initd":
-    cwd => $installdir,
-    patch => template("sonar/sonar-${version}.patch"),
-  } ->
+  if $version in ["2.5", "2.6", "2.10", "2.11"] {
+    patch { "initd":
+      cwd => $installdir,
+      patch => template("sonar/sonar-${version}.patch"),
+      require => File["/etc/init.d/${service}"],
+      before => File[$home],
+    }
+  }
 
   # Sonar home
   file { $home:
