@@ -129,6 +129,13 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
     notify => Service[$service],
   } ->
 
+  plugin { "sonar-ldap-plugin" :
+    artifactid => "sonar-ldap-plugin",
+    version => "1.0",
+    ensure => empty($ldap) ? {true => absent, false => present},
+    notify => Service[$service],
+  } ->
+
   service { $service:
     name => $service,
     ensure => running,
