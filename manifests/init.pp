@@ -55,10 +55,10 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
   $script = "${installdir}/bin/${bin_folder}/sonar.sh"
 
-  # move folders susceptible to change from installation folder to /var/local/sonar and symlink
+  # copy folders susceptible to change from installation folder to /var/local/sonar and symlink
   define move_to_home() {
-    exec { "mv ${sonar::installdir}/${name} ${sonar::home}":
-      creates => "${sonar::home}/${name}",
+    file { "${sonar::home}/${name}":
+      ensure => directory,
     } ->
     file { "${sonar::installdir}/${name}":
       ensure => link,
@@ -78,54 +78,57 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
     source => "${download_url}/sonar-${version}.zip",
     destination => $tmpzip,
   } ->
-  exec { "untar":
-    command => "unzip ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/sonar-${version}",
-    creates => "${installroot}/sonar-${version}",
-  } ->
-  file { $installdir:
-    ensure => link,
-    target => "${installroot}/sonar-${version}",
-  } ->
-  exec { "run_as_user":
-    command => "mv ${script} ${script}.bak && sed -e 's/#RUN_AS_USER=/RUN_AS_USER=${user}/' ${script}.bak > ${script}",
-    unless  => "grep RUN_AS_USER=${user} ${script}",
-  } ->
-  file { $script:
-    mode => 755,
-  } ->
-  file { "/etc/init.d/${service}":
-    ensure  => link,
-    target  => $script,
-  }
 
-  # we need to patch the init.d scripts until Sonar 2.12
-  # https://github.com/SonarSource/sonar/pull/15
-  if $version in ["2.5", "2.6", "2.10", "2.11"] {
-    patch { "initd":
-      cwd => $installdir,
-      patch => template("sonar/sonar-${version}.patch"),
-      require => File["/etc/init.d/${service}"],
-      before => File[$home],
-    }
-  }
+
+  # ===== Create folder structure =====
+  # so uncompressing new sonar versions at update time use the previous sonar home,
+  # installing new extensions and plugins over the old ones, reusing the db,...
 
   # Sonar home
   file { $home:
     ensure => directory,
     mode => 0700,
   } ->
+  file { "${installroot}/sonar-${version}":
+    ensure => directory,
+  } ->
+  file { $installdir:
+    ensure => link,
+    target => "${installroot}/sonar-${version}",
+  } ->
   move_to_home { "data": } ->
   move_to_home { "extras": } ->
   move_to_home { "extensions": } ->
   move_to_home { "logs": } ->
 
+
+  # ===== Install Sonar =====
+
+  exec { "untar":
+    command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/sonar-${version}",
+    creates => "${installroot}/sonar-${version}/bin",
+  } ->
+  exec { "run_as_user":
+    command => "mv -f ${script} ${script}.bak && sed -e 's/#RUN_AS_USER=/RUN_AS_USER=${user}/' ${script}.bak > ${script}",
+    unless  => "grep RUN_AS_USER=${user} ${script}",
+  } ->
+  exec { "pid_dir":
+    command => "mv -f ${script} ${script}.bak && sed -e 's@PIDDIR=\"\\.\"@PIDDIR=\"${sonar::home}/logs\"@' ${script}.bak > ${script}",
+    unless  => "grep PIDDIR=\\\"${sonar::home}/logs\\\" ${script}",
+  } ->
+  file { $script:
+    mode => 755,
+    require => Exec["run_as_user"], # to override puppet autorequirement
+  } ->
+  file { "/etc/init.d/${service}":
+    ensure  => link,
+    target  => $script,
+  } ->
+
   # Sonar configuration files
   file { "${installdir}/conf/sonar.properties":
     content => template("sonar/sonar.properties.erb"),
-    notify => Service[$service],
-  } ->
-  file { "${installdir}/conf/logback.xml":
-    content => template("sonar/logback.xml.erb"),
+    require => Exec["untar"],
     notify => Service[$service],
   } ->
 
@@ -142,6 +145,23 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
     hasrestart => true,
     hasstatus => true,
     enable => true,
+  }
+
+  # we need to patch the init.d scripts until Sonar 2.12
+  # https://github.com/SonarSource/sonar/pull/15
+  if $version in ["2.5", "2.6", "2.10", "2.11"] {
+    patch { "initd":
+      cwd => $installdir,
+      patch => template("sonar/sonar-${version}.patch"),
+      require => Exec["untar"],
+      before => Service[$service],
+    }
+    # set the right log location, not needed in Sonar 2.12+
+    file { "${installdir}/conf/logback.xml":
+      content => template("sonar/logback.xml.erb"),
+      require => Exec["untar"],
+      notify  => Service[$service],
+    }
   }
 
 }

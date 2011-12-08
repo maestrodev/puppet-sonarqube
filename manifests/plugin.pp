@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Class: plugin
+# Definition: plugin
 #
 # A puppet definition for Sonar plugin installation
 #
 define plugin($groupid = "org.codehaus.sonar-plugins", $artifactid, $version, $ensure = present) {
 
-  $plugin = "${sonar::home}/extensions/plugins/${artifactid}-${version}.jar"
+  $plugin_dir = "${sonar::home}/extensions"
+  $plugin = "${plugin_dir}/${artifactid}-${version}.jar"
 
   if $ensure == present {
     maven { $plugin:
@@ -26,6 +27,7 @@ define plugin($groupid = "org.codehaus.sonar-plugins", $artifactid, $version, $e
       artifactid => $artifactid,
       version => $version,
       before => File[$plugin],
+      require => File[$plugin_dir],
     }
   }
   file { $plugin:
