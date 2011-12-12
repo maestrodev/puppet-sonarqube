@@ -131,6 +131,10 @@ class sonar( $version, $user = "sonar", $group = "sonar", $service = "sonar",
     require => Exec["untar"],
     notify => Service[$service],
   } ->
+  # The plugins directory. Useful to later reference it from the plugin definition
+  file { "${home}/extensions/plugins":
+    ensure => directory,
+  } ->
 
   plugin { "sonar-ldap-plugin" :
     artifactid => "sonar-ldap-plugin",
