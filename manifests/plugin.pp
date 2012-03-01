@@ -16,7 +16,9 @@
 #
 # A puppet definition for Sonar plugin installation
 #
-define plugin($groupid = "org.codehaus.sonar-plugins", $artifactid, $version, $ensure = present) {
+define sonar::plugin(
+  $artifactid, $version,
+  $groupid = 'org.codehaus.sonar-plugins', $ensure = present) {
 
   $plugin_dir  = "${sonar::home}/extensions/plugins"
   $plugin_name = "${artifactid}-${version}.jar"
@@ -27,11 +29,11 @@ define plugin($groupid = "org.codehaus.sonar-plugins", $artifactid, $version, $e
     # copy to a temp file as Maven can run as a different user and not have rights to copy to
     # sonar plugin folder
     maven { "/tmp/${plugin_name}":
-      groupid => $groupid,
+      groupid    => $groupid,
       artifactid => $artifactid,
-      version => $version,
-      before => File[$plugin],
-      require => File[$plugin_dir],
+      version    => $version,
+      before     => File[$plugin],
+      require    => File[$plugin_dir],
     }
     file { $plugin:
       ensure => $ensure,

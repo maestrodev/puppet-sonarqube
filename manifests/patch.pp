@@ -30,11 +30,11 @@
 #   patch => template("patch"),
 # }
 #
-define patch($cwd = '.', $patch, $fuzz = 2) {
+define sonar::patch( $patch, $cwd = '.', $fuzz = 2) {
 
   $patch_file = "${cwd}/patch_${name}.patch"
 
-  package { "patch":
+  package { 'patch':
     ensure => installed,
   } ->
 
@@ -42,10 +42,10 @@ define patch($cwd = '.', $patch, $fuzz = 2) {
     content => $patch,
   } ->
   exec { "patch_${name}":
-    path => "/bin:/usr/bin",
-    command => "patch -F ${fuzz} -b -p0 < ${patch_file} && touch ${patch_file}.applied",
-    cwd => $cwd,
+    path      => '/bin:/usr/bin',
+    command   => "patch -F ${fuzz} -b -p0 < ${patch_file} && touch ${patch_file}.applied",
+    cwd       => $cwd,
     logoutput => true,
-    creates => "${patch_file}.applied",
+    creates   => "${patch_file}.applied",
   }
 }

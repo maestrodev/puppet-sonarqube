@@ -27,39 +27,39 @@ Module requirements
 
 Usage
 
-class { "maven::maven" : } ->
-class { "sonar" :
-  version => "2.11",
+class { 'maven::maven' : } ->
+class { 'sonar' :
+  version => '2.11',
 }
 
 - or -
 
 $jdbc = {
-  url => "jdbc:derby://localhost:1527/sonar;create=true",
-  driver_class_name => "org.apache.derby.jdbc.ClientDriver",
-  validation_query => "values(1)",
-  username => "sonar",
-  password => "sonar",
+  url               => 'jdbc:derby://localhost:1527/sonar;create=true',
+  driver_class_name => 'org.apache.derby.jdbc.ClientDriver',
+  validation_query  => 'values(1)',
+  username          => 'sonar',
+  password          => 'sonar',
 }
 
-class { "maven::maven" : } ->
-class { "sonar" :
-  arch => "linux-x86-64",
-  version => "2.11",
-  user => "sonar",
-  group => "sonar",
-  service => "sonar",
-  installroot => "/usr/local",
-  home => "/var/local/sonar",
-  download_url => "http://dist.sonar.codehaus.org"
-  jdbc => $jdbc,
-  log_folder => "/var/local/sonar/logs",
+class { 'maven::maven' : } ->
+class { 'sonar' :
+  arch         => 'linux-x86-64',
+  version      => '2.11',
+  user         => 'sonar',
+  group        => 'sonar',
+  service      => 'sonar',
+  installroot  => '/usr/local',
+  home         => '/var/local/sonar',
+  download_url => 'http://dist.sonar.codehaus.org'
+  jdbc         => $jdbc,
+  log_folder   => '/var/local/sonar/logs',
 }
 
 # Install a Sonar plugin
-plugin { "sonar-twitter-plugin" :
-  groupid => "org.codehaus.sonar-plugins",
-  artifactid => "sonar-twitter-plugin",
-  version => "0.1",
-  notify => Service["sonar"],
+sonar::plugin { 'sonar-twitter-plugin' :
+  groupid    => 'org.codehaus.sonar-plugins',
+  artifactid => 'sonar-twitter-plugin',
+  version    => '0.1',
+  notify     => Service['sonar'],
 }
