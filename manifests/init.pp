@@ -141,6 +141,7 @@ class sonar (
     hasrestart => true,
     hasstatus  => true,
     enable     => true,
+    require    => File["/etc/init.d/${service}"],
   }
 
   # we need to patch the init.d scripts until Sonar 2.12
