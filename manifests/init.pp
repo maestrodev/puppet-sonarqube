@@ -64,7 +64,6 @@ class sonar (
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
   $script = "${installdir}/bin/${bin_folder}/sonar.sh"
 
-
   user { $user:
     ensure     => present,
     home       => $home,
@@ -109,18 +108,11 @@ class sonar (
     command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/sonar-${version}",
     creates => "${installroot}/sonar-${version}/bin",
   } ->
-  exec { 'run_as_user':
-    command => "mv -f ${script} ${script}.bak && sed -e 's/#RUN_AS_USER=/RUN_AS_USER=${user}/' ${script}.bak > ${script}",
-    unless  => "grep RUN_AS_USER=${user} ${script}",
-  } ->
-  exec { 'pid_dir':
-    command => "mv -f ${script} ${script}.bak && sed -e 's@PIDDIR=\"\\.\"@PIDDIR=\"${sonar::home}/logs\"@' ${script}.bak > ${script}",
-    unless  => "grep PIDDIR=\\\"${sonar::home}/logs\\\" ${script}",
-  } ->
   file { $script:
     mode    => '0755',
+    content => template("sonar/sonar.sh.erb"),
     require => Exec['run_as_user'], # to override puppet autorequirement
-  } ->
+  }
   file { "/etc/init.d/${service}":
     ensure  => link,
     target  => $script,
