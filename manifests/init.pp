@@ -100,7 +100,7 @@ class sonar (
   sonar::move_to_home { 'data': } ->
   sonar::move_to_home { 'extras': } ->
   sonar::move_to_home { 'extensions': } ->
-  sonar::move_to_home { 'logs': }
+  sonar::move_to_home { 'logs': } ->
 
   # ===== Install Sonar =====
 
