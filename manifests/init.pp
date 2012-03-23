@@ -111,7 +111,6 @@ class sonar (
   file { $script:
     mode    => '0755',
     content => template("sonar/sonar.sh.erb"),
-    require => Exec['run_as_user'], # to override puppet autorequirement
   }
   file { "/etc/init.d/${service}":
     ensure  => link,
