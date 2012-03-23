@@ -144,15 +144,7 @@ class sonar (
     require    => File["/etc/init.d/${service}"],
   }
 
-  # we need to patch the init.d scripts until Sonar 2.12
-  # https://github.com/SonarSource/sonar/pull/15
   if $version in ['2.5', '2.6', '2.10', '2.11'] {
-    sonar::patch { 'initd':
-      cwd     => $installdir,
-      patch   => template("sonar/sonar-${version}.patch"),
-      require => Exec['untar'],
-      before  => Service[$service],
-    }
     # set the right log location, not needed in Sonar 2.12+
     file { "${installdir}/conf/logback.xml":
       content => template('sonar/logback.xml.erb'),
