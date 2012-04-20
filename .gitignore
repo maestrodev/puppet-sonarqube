@@ -1,4 +1,4 @@
-.project
-pkg
-metadata.json
+/.project
+/pkg
+/metadata.json
 /.rvmrc
