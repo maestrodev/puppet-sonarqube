@@ -51,7 +51,7 @@ class { 'sonar' :
   service      => 'sonar',
   installroot  => '/usr/local',
   home         => '/var/local/sonar',
-  download_url => 'http://dist.sonar.codehaus.org'
+  download_url => 'http://dist.sonar.codehaus.org',
   jdbc         => $jdbc,
   log_folder   => '/var/local/sonar/logs',
 }
