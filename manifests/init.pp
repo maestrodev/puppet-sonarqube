@@ -19,7 +19,7 @@ class sonar (
   $user_system = true,
   $service = 'sonar', $installroot = '/usr/local', $home = '/var/local/sonar',
   $port = 9000, $download_url = 'http://dist.sonar.codehaus.org', 
-  $context_path = '/', $arch = '', $ldap = {},
+  $context_path = '/', $arch = '', $ldap = {}, $crowd = {},
   $jdbc = {
     url               => 'jdbc:derby://localhost:1527/sonar;create=true',
     driver_class_name => 'org.apache.derby.jdbc.ClientDriver',
@@ -131,6 +131,13 @@ class sonar (
   sonar::plugin { 'sonar-ldap-plugin' :
     ensure     => empty($ldap) ? {true => absent, false => present},
     artifactid => 'sonar-ldap-plugin',
+    version    => '1.0',
+    notify     => Service[$service],
+  } ->
+
+  sonar::plugin { 'sonar-crowd-plugin' :
+    ensure     => empty($crowd) ? {true => absent, false => present},
+    artifactid => 'sonar-crowd-plugin',
     version    => '1.0',
     notify     => Service[$service],
   } ->

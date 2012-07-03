@@ -210,3 +210,34 @@ ldap.bindPassword: <%=ldap['bind_password']%>
 # Default is 'com.sun.jndi.ldap.LdapCtxFactory'.
 #ldap.contextFactoryClass: com.sun.jndi.ldap.LdapCtxFactory
 <% end %>
+
+<% if !crowd.empty? %>
+#-------------------
+# Sonar Crowd Plugin
+#-------------------
+# IMPORTANT : before activation, make sure that one Sonar administrator is defined in the external system
+# Activates the plugin. Leave blank or comment out to use default sonar authentication.
+sonar.authenticator.class: org.sonar.plugins.crowd.CrowdAuthenticator
+
+# Ignore failure at startup if the connection to external system is refused.
+# Users can browse sonar but not log in as long as the connection fails.
+# When set to true, Sonar will not start if connection to external system fails.
+# Default is false.
+#sonar.authenticator.ignoreStartupFailure: true
+
+# Automatically create users (available since Sonar 2.0).
+# When set to true, user will be created after successful authentication, if doesn't exists.
+# The default group affected to new users can be defined online, in Sonar general settings. The default value is "sonar-users".
+# Default is false.
+sonar.authenticator.createUsers: true
+
+# URL of the Crowd server (usually ends with /services/).
+crowd.url: <%=crowd['service_url']%>
+
+# Crowd application name.
+# Default is 'sonar'.
+crowd.application: <%=crowd['application']%>
+
+# Crowd application password.
+crowd.password: <%=crowd['password']%>
+<% end %>
