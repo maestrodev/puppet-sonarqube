@@ -50,6 +50,7 @@ class sonar (
   if $arch1 != 'macosx' {
     $arch2 = $::architecture ? {
       'x86_64' => 'x86-64',
+      'amd64'  => 'x86-64',
       default  => 'x86-32',
     }
   } else {
