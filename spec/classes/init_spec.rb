@@ -31,4 +31,16 @@ describe 'sonar' do
       content.should_not =~ %r[crowd]
     end
   end
+
+  context "when unzip package is not defined" do
+    it { should contain_package('unzip').with_ensure('present') }
+  end
+
+  context "when unzip package is already defined" do
+    let(:pre_condition) { %Q[
+      package { 'unzip': ensure => installed }
+    ] } 
+
+    it { should contain_package('unzip').with_ensure('installed') }
+  end
 end

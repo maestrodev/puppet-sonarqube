@@ -65,6 +65,13 @@ class sonar (
   $tmpzip = "/usr/local/src/${service}-${version}.zip"
   $script = "${installdir}/bin/${bin_folder}/sonar.sh"
 
+  if ! defined(Package[unzip]) {
+    package { unzip:
+      ensure => present,
+      before => Exec[untar]
+    }
+  }
+
   user { $user:
     ensure     => present,
     home       => $home,
