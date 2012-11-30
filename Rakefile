@@ -1,20 +1,19 @@
+require 'bundler'
+Bundler.require(:rake)
 require 'rake/clean'
-require 'puppet-lint/tasks/puppet-lint'
-require 'rspec/core/rake_task'
 
-CLEAN.include('pkg')
+CLEAN.include('spec/fixtures/', 'doc', 'pkg')
+CLOBBER.include('.tmp', '.librarian')
+
+require 'puppetlabs_spec_helper/rake_tasks'
 
 PuppetLint.configuration.send("disable_80chars")
 
-desc "Run module RSpec tests."
-RSpec::Core::RakeTask.new(:spec) do |t|
-  t.rspec_opts = ["--format", "doc", "--color"]
-  t.pattern = 'spec/*/*_spec.rb'
+# use librarian-puppet to manage fixtures instead of .fixtures.yml
+# offers more possibilities like explicit version management, forge downloads,...
+task :librarian_spec_prep do
+ sh "librarian-puppet install --path=spec/fixtures/modules/"
 end
+task :spec_prep => :librarian_spec_prep
 
-desc "Create a Puppet module."
-task :build => [:clean, :spec] do
-  sh 'puppet-module build'
-end
-
-task :default => :build
+task :default => [:clean, :spec]
