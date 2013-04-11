@@ -113,7 +113,7 @@ class sonar (
   # ===== Install Sonar =====
 
   exec { 'untar':
-    command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/sonar-${version}",
+    command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/sonar-${version} && chown -R ${user}:${group} ${home}",
     creates => "${installroot}/sonar-${version}/bin",
   } ->
   file { $script:
