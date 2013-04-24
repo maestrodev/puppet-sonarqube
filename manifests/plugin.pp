@@ -17,7 +17,7 @@
 # A puppet definition for Sonar plugin installation
 #
 define sonar::plugin(
-  $artifactid, $version,
+  $artifactid = $name, $version,
   $groupid = 'org.codehaus.sonar-plugins', $ensure = present) {
 
   $plugin_dir  = "${sonar::home}/extensions/plugins"
