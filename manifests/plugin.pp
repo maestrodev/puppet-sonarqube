@@ -40,11 +40,13 @@ define sonar::plugin(
       source => "/tmp/${plugin_name}",
       owner  => $sonar::user,
       group  => $sonar::group,
+      notify => Service['sonar'],
     }
   } else {
     # Uninstall plugin if absent
     file { $plugin:
       ensure => $ensure,
+      notify => Service['sonar'],
     }
   }
 }
