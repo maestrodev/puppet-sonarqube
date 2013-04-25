@@ -17,7 +17,7 @@
 # A puppet definition for Sonar plugin installation
 #
 define sonar::plugin(
-  $artifactid, $version,
+  $artifactid = $name, $version,
   $groupid = 'org.codehaus.sonar-plugins', $ensure = present) {
 
   $plugin_dir  = "${sonar::home}/extensions/plugins"
@@ -40,11 +40,13 @@ define sonar::plugin(
       source => "/tmp/${plugin_name}",
       owner  => $sonar::user,
       group  => $sonar::group,
+      notify => Service['sonar'],
     }
   } else {
     # Uninstall plugin if absent
     file { $plugin:
       ensure => $ensure,
+      notify => Service['sonar'],
     }
   }
 }
