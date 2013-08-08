@@ -22,9 +22,9 @@
   <!-- SONAR_STANDALONE/ -->
   <!-- do not edit/remove the previous comment -->
   <appender name="SONAR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <File><%=log_folder%>/sonar.log</File>
+    <File><%= @log_folder %>/sonar.log</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <param name="FileNamePattern" value="<%=log_folder%>/sonar.%i.log"/>
+      <param name="FileNamePattern" value="<%= @log_folder %>/sonar.%i.log"/>
       <param name="MinIndex" value="1"/>
       <param name="MaxIndex" value="3"/>
     </rollingPolicy>
@@ -46,11 +46,11 @@
   </appender>
 
   <!-- appender used to profile Sonar Server -->
-  <%= "<!--" if !profile %>
+  <%= "<!--" if !@profile %>
   <appender name="PROFILING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <File><%=log_folder%>/profiling.log</File>
+    <File><%= @log_folder %>/profiling.log</File>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <param name="FileNamePattern" value="<%=log_folder%>/profiling.%i.log"/>
+      <param name="FileNamePattern" value="<%= @log_folder %>/profiling.%i.log"/>
       <param name="MinIndex" value="1"/>
       <param name="MaxIndex" value="3"/>
     </rollingPolicy>
@@ -63,7 +63,7 @@
       </pattern>
     </layout>
   </appender>
-  <%= "-->" if !profile %>
+  <%= "-->" if !@profile %>
 
   <!-- do not edit/remove the following comment -->
   <!-- /SONAR_STANDALONE -->

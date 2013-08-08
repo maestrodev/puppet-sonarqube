@@ -14,9 +14,9 @@
 #---------------------------------------------------------
 # Listen host/port and context path (for example / or /sonar). Default values are 0.0.0.0:9000/.
 #sonar.web.host:                           0.0.0.0
-sonar.web.port:                           <%=port%>
+sonar.web.port:                           <%= @port %>
 <% if has_variable?('context_path') -%>
-sonar.web.context:                        <%= context_path %>
+sonar.web.context:                        <%= @context_path %>
 <% end -%>
 
 # Log HTTP requests. Deactivated by default.
@@ -36,17 +36,17 @@ sonar.web.context:                        <%= context_path %>
 #
 #-----------------------------------------------------------------------
 
-<% if !jdbc.empty? -%>
+<% if !@jdbc.empty? -%>
 
 #----- Credentials
 # Permissions to create tables and indexes must be granted to JDBC user.
 # The schema must be created first.
-sonar.jdbc.username:                       <%=jdbc['username']%>
-sonar.jdbc.password:                       <%=jdbc['password']%>
+sonar.jdbc.username:                       <%= @jdbc['username'] %>
+sonar.jdbc.password:                       <%= @jdbc['password'] %>
 
-sonar.jdbc.url:                            <%=jdbc['url']%>
-sonar.jdbc.driverClassName:                <%=jdbc['driver_class_name']%>
-sonar.jdbc.validationQuery:                <%=jdbc['validation_query']%>
+sonar.jdbc.url:                            <%= @jdbc['url'] %>
+sonar.jdbc.driverClassName:                <%= @jdbc['driver_class_name'] %>
+sonar.jdbc.validationQuery:                <%= @jdbc['validation_query'] %>
 
 #----- Embedded database Derby
 # Note : it does accept connections from remote hosts, so the
@@ -147,7 +147,7 @@ sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
 sonar.notifications.delay=60
 
 
-<% if !ldap.empty? %>
+<% if !@ldap.empty? %>
 
 #-------------------
 # Sonar LDAP Plugin
@@ -172,20 +172,20 @@ sonar.authenticator.createUsers: true
 # (omit if you use autodiscovery) URL of the LDAP server.
 # If you are using ldaps, then you should install server certificate into java truststore.
 # eg. ldap://localhost:10389
-ldap.url: ldap<%= "s" if ldap['ssl'] %>://<%=ldap['hostname']%>:<%=ldap['port']%>
+ldap.url: ldap<%= "s" if @ldap['ssl'] %>://<%= @ldap['hostname'] %>:<%= @ldap['port'] %>
 
 # (optional) Distinguished Name (DN) of the root node in LDAP from which to search for users,
 # eg. "ou=users,o=mycompany"
-ldap.baseDn: <%=ldap['dn']%>
+ldap.baseDn: <%= @ldap['dn'] %>
 
 # (optional) Bind DN is the username of an LDAP user to connect (or bind) with.
 # This is a Distinguished Name of a user who has administrative rights,
 # eg. "cn=sonar,ou=users,o=mycompany". Leave blank for anonymous access to the LDAP directory.
-ldap.bindDn: <%=ldap['bind_dn']%>
+ldap.bindDn: <%= @ldap['bind_dn'] %>
 
 # (optional) Bind Password is the password of the user to connect with.
 # Leave blank for anonymous access to the LDAP directory.
-ldap.bindPassword: <%=ldap['bind_password']%>
+ldap.bindPassword: <%= @ldap['bind_password'] %>
 
 # Login Attribute is the attribute in LDAP holding the user's login.
 # Default is 'uid'. Set 'sAMAccountName' for Microsoft Active Directory
@@ -211,7 +211,7 @@ ldap.bindPassword: <%=ldap['bind_password']%>
 #ldap.contextFactoryClass: com.sun.jndi.ldap.LdapCtxFactory
 <% end %>
 
-<% if !crowd.empty? %>
+<% if !@crowd.empty? %>
 #-------------------
 # Sonar Crowd Plugin
 #-------------------
@@ -232,12 +232,12 @@ sonar.authenticator.class: org.sonar.plugins.crowd.CrowdAuthenticator
 sonar.authenticator.createUsers: true
 
 # URL of the Crowd server (usually ends with /services/).
-crowd.url: <%=crowd['service_url']%>
+crowd.url: <%= @crowd['service_url'] %>
 
 # Crowd application name.
 # Default is 'sonar'.
-crowd.application: <%=crowd['application']%>
+crowd.application: <%= @crowd['application'] %>
 
 # Crowd application password.
-crowd.password: <%=crowd['password']%>
+crowd.password: <%= @crowd['password'] %>
 <% end %>
