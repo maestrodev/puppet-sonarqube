@@ -1,3 +1,3 @@
 fixtures:
   symlinks:
-    sonar: "#{source_dir}"
+    sonarqube: "#{source_dir}"

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 SONAR_PROPERTIES = "/usr/local/sonar/conf/sonar.properties"
 
-describe 'sonar' do
+describe 'sonarqube' do
   context "when crowd configuration is supplied" do
     let(:params) { { :crowd => {
       'application' => 'crowdapplication',
@@ -10,7 +10,7 @@ describe 'sonar' do
       'password'    => 'crowdpassword',
     } } }
 
-    it { should contain_sonar__plugin('sonar-crowd-plugin').with_ensure('present') }
+    it { should contain_sonarqube__plugin('sonar-crowd-plugin').with_ensure('present') }
 
     it { should contain_file(SONAR_PROPERTIES) }
     it 'should generate sonar.properties config for crowd' do
@@ -23,7 +23,7 @@ describe 'sonar' do
   end
 
   context "when no crowd configuration is supplied" do
-    it { should contain_sonar__plugin('sonar-crowd-plugin').with_ensure('absent') }
+    it { should contain_sonarqube__plugin('sonar-crowd-plugin').with_ensure('absent') }
 
     it { should contain_file(SONAR_PROPERTIES) }
     it 'should generate sonar.properties config without crowd' do
@@ -39,7 +39,7 @@ describe 'sonar' do
   context "when unzip package is already defined" do
     let(:pre_condition) { %Q[
       package { 'unzip': ensure => installed }
-    ] } 
+    ] }
 
     it { should contain_package('unzip').with_ensure('installed') }
   end
