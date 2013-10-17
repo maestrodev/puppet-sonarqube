@@ -1,30 +1,28 @@
-Puppet-Sonar
-============
+Puppet-SonarQube
+================
 
-A puppet recipe to install Sonar
+A puppet recipe to install SonarQube (former Sonar)
 
 
 # Usage
 
     class { 'maven::maven' : } ->
-    class { 'sonar' :
-      version => '2.11',
+    class { 'sonarqube' :
+      version => '3.7.2',
     }
 
 or
 
     $jdbc = {
-      url               => 'jdbc:derby://localhost:1527/sonar;create=true',
-      driver_class_name => 'org.apache.derby.jdbc.ClientDriver',
-      validation_query  => 'values(1)',
+      url               => 'jdbc:h2:tcp://localhost:9092/sonar',
       username          => 'sonar',
       password          => 'sonar',
     }
 
     class { 'maven::maven' : } ->
-    class { 'sonar' :
+    class { 'sonarqube' :
       arch         => 'linux-x86-64',
-      version      => '2.11',
+      version      => '3.7.2',
       user         => 'sonar',
       group        => 'sonar',
       service      => 'sonar',
@@ -35,12 +33,11 @@ or
       log_folder   => '/var/local/sonar/logs',
     }
 
+## SonarQube Plugins
 
-## Sonar Plugins
+The `sonarqube::plugin` defined type can also be used to install Sonar plugins, e.g.:
 
-The `sonar::plugin` defined type can also be used to install Sonar plugins, e.g.:
-
-    sonar::plugin { 'sonar-twitter-plugin' :
+    sonarqube::plugin { 'sonar-twitter-plugin' :
       groupid    => 'org.codehaus.sonar-plugins',
       artifactid => 'sonar-twitter-plugin',
       version    => '0.1',
@@ -50,14 +47,14 @@ The `sonar::plugin` defined type can also be used to install Sonar plugins, e.g.
 
 ### LDAP Plugin
 
-The `sonar` class actually includes "built-in" support for the LDAP plugin to make it easier to use, e.g.:
+The `sonarqube` class actually includes "built-in" support for the LDAP plugin to make it easier to use, e.g.:
 
     $ldap = {
       url          => 'ldap://myserver.mycompany.com',
       user_base_dn => 'ou=Users,dc=mycompany,dc=com',
     }
 
-    class { 'sonar' :
+    class { 'sonarqube' :
       ldap => $ldap,
     }
 

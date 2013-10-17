@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class sonar (
-  $version = '2.13.1',
+class sonarqube (
+  $version = '3.7.2',
   $user = 'sonar',
   $group = 'sonar',
   $user_system = true,
@@ -21,9 +21,7 @@ class sonar (
   $port = 9000, $download_url = 'http://dist.sonar.codehaus.org', 
   $context_path = '/', $arch = '', $ldap = {}, $crowd = {},
   $jdbc = {
-    url               => 'jdbc:derby://localhost:1527/sonar;create=true',
-    driver_class_name => 'org.apache.derby.jdbc.ClientDriver',
-    validation_query  => 'values(1)',
+    url               => 'jdbc:h2:tcp://localhost:9092/sonar',
     username          => 'sonar',
     password          => 'sonar',
   },
@@ -105,10 +103,10 @@ class sonar (
     ensure => link,
     target => "${installroot}/sonar-${version}",
   } ->
-  sonar::move_to_home { 'data': } ->
-  sonar::move_to_home { 'extras': } ->
-  sonar::move_to_home { 'extensions': } ->
-  sonar::move_to_home { 'logs': } ->
+  sonarqube::move_to_home { 'data': } ->
+  sonarqube::move_to_home { 'extras': } ->
+  sonarqube::move_to_home { 'extensions': } ->
+  sonarqube::move_to_home { 'logs': } ->
 
   # ===== Install Sonar =====
 
@@ -118,7 +116,7 @@ class sonar (
   } ->
   file { $script:
     mode    => '0755',
-    content => template("sonar/sonar.sh.erb"),
+    content => template("sonarqube/sonar.sh.erb"),
   }
   file { "/etc/init.d/${service}":
     ensure  => link,
@@ -127,7 +125,7 @@ class sonar (
 
   # Sonar configuration files
   file { "${installdir}/conf/sonar.properties":
-    content => template('sonar/sonar.properties.erb'),
+    content => template('sonarqube/sonar.properties.erb'),
     require => Exec['untar'],
     notify  => Service[$service],
   } ->
@@ -137,14 +135,14 @@ class sonar (
   } ->
 
   # For convenience, provide "built-in" support for the Sonar LDAP plugin.
-  sonar::plugin { 'sonar-ldap-plugin' :
+  sonarqube::plugin { 'sonar-ldap-plugin' :
     ensure     => empty($ldap) ? {true => absent, false => present},
     artifactid => 'sonar-ldap-plugin',
     version    => '1.3',
     notify     => Service[$service],
   } ->
 
-  sonar::plugin { 'sonar-crowd-plugin' :
+  sonarqube::plugin { 'sonar-crowd-plugin' :
     ensure     => empty($crowd) ? {true => absent, false => present},
     artifactid => 'sonar-crowd-plugin',
     version    => '1.0',
@@ -159,14 +157,4 @@ class sonar (
     enable     => true,
     require    => File["/etc/init.d/${service}"],
   }
-
-  if $version in ['2.5', '2.6', '2.10', '2.11'] {
-    # set the right log location, not needed in Sonar 2.12+
-    file { "${installdir}/conf/logback.xml":
-      content => template('sonar/logback.xml.erb'),
-      require => Exec['untar'],
-      notify  => Service[$service],
-    }
-  }
-
 }

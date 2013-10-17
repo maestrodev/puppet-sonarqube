@@ -1,11 +1,11 @@
 # copy folders susceptible to change from installation folder to /var/local/sonar and symlink
-define sonar::move_to_home() {
-  file { "${sonar::home}/${name}":
+define sonarqube::move_to_home() {
+  file { "${sonarqube::home}/${name}":
       ensure => directory,
   } ->
 
-  file { "${sonar::installdir}/${name}":
+  file { "${sonarqube::installdir}/${name}":
       ensure => link,
-      target => "${sonar::home}/${name}",
+      target => "${sonarqube::home}/${name}",
   }
 }
