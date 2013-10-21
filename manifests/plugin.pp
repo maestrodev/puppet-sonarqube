@@ -28,6 +28,8 @@ define sonarqube::plugin(
   if $ensure == present {
     # copy to a temp file as Maven can run as a different user and not have rights to copy to
     # sonar plugin folder
+    include maven
+
     maven { "/tmp/${plugin_name}":
       groupid    => $groupid,
       artifactid => $artifactid,
