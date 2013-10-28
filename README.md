@@ -35,7 +35,10 @@ or
       log_folder   => '/var/local/sonar/logs',
     }
 
-## Install a Sonar plugin
+
+## Sonar Plugins
+
+The `sonar::plugin` defined type can also be used to install Sonar plugins, e.g.:
 
     sonar::plugin { 'sonar-twitter-plugin' :
       groupid    => 'org.codehaus.sonar-plugins',
@@ -43,6 +46,21 @@ or
       version    => '0.1',
       notify     => Service['sonar'],
     }
+    
+
+### LDAP Plugin
+
+The `sonar` class actually includes "built-in" support for the LDAP plugin to make it easier to use, e.g.:
+
+    $ldap = {
+      url          => 'ldap://myserver.mycompany.com',
+      user_base_dn => 'ou=Users,dc=mycompany,dc=com',
+    }
+
+    class { 'sonar' :
+      ldap => $ldap,
+    }
+
 
 # Module requirements
 

@@ -136,10 +136,11 @@ class sonar (
     ensure => directory,
   } ->
 
+  # For convenience, provide "built-in" support for the Sonar LDAP plugin.
   sonar::plugin { 'sonar-ldap-plugin' :
     ensure     => empty($ldap) ? {true => absent, false => present},
     artifactid => 'sonar-ldap-plugin',
-    version    => '1.0',
+    version    => '1.3',
     notify     => Service[$service],
   } ->
 
