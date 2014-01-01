@@ -8,7 +8,7 @@ A puppet recipe to install SonarQube (former Sonar)
 
     class { 'maven::maven' : } ->
     class { 'sonarqube' :
-      version => '3.7.2',
+      version => '3.7.4',
     }
 
 or
