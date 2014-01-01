@@ -170,11 +170,11 @@ ldap.user.baseDn=<%= @ldap['user_base_dn'] %>
 <% if @ldap['user_request'] -%>
 ldap.user.request=<%= @ldap['user_request'] %>
 <% end -%>
-<% if @ldap['user_real_name_attrib'] -%>
-ldap.user.realNameAttribute=<%= @ldap['user_real_name_attrib'] %>
+<% if @ldap['user_real_name_attribute'] -%>
+ldap.user.realNameAttribute=<%= @ldap['user_real_name_attribute'] %>
 <% end -%>
-<% if @ldap['user_real_email_attrib'] -%>
-ldap.user.emailAttribute=<%= @ldap['user_real_email_attrib'] %>
+<% if @ldap['user_email_attribute'] -%>
+ldap.user.emailAttribute=<%= @ldap['user_email_attribute'] %>
 <% end -%>
 
 <% if @ldap['group_base_dn'] -%>
@@ -183,8 +183,8 @@ ldap.group.baseDn=<%= @ldap['group_base_dn'] %>
 <% if @ldap['group_request'] -%>
 ldap.group.request=<%= @ldap['group_request'] %>
 <% end -%>
-<% if @ldap['group_id_attrib'] -%>
-ldap.group.idAttribute=<%= @ldap['group_id_attrib'] %>
+<% if @ldap['group_id_attribute'] -%>
+ldap.group.idAttribute=<%= @ldap['group_id_attribute'] %>
 <% end -%>
 <% end -%>
 <% if !@crowd.empty? %>
