@@ -1,10 +1,10 @@
-name 'maestrodev-sonar'
-version '1.0.3'
+name 'maestrodev-sonarqube'
+version '2.0.0'
 
 author 'maestrodev'
 license 'Apache License, Version 2.0'
-project_page 'http://github.com/maestrodev/puppet-sonar'
-source 'http://github.com/maestrodev/puppet-sonar'
+project_page 'http://github.com/maestrodev/puppet-sonarqube'
+source 'http://github.com/maestrodev/puppet-sonarqube'
 summary 'SonarQube installation and configuration'
 description 'A module to install and configure SonarQube (former Sonar)'
 
