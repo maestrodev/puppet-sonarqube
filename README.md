@@ -1,6 +1,8 @@
 Puppet-Sonar
 ============
 
+**NOTE: MOVED TO [puppet-sonarqube](https://github.com/maestrodev/puppet-sonarqube) to support the new versions of SonarQube**
+
 A puppet recipe to install Sonar
 
 

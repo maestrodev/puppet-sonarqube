@@ -29,6 +29,8 @@ class sonar (
   },
   $log_folder = '/var/local/sonar/logs', $profile = false) {
 
+  notice('puppet-sonar is now deprecated in favor of puppet-sonarqube')
+
   Exec {
     path => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin'
   }
