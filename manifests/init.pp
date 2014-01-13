@@ -11,14 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 class sonarqube (
   $version = '3.7.4',
   $user = 'sonar',
   $group = 'sonar',
   $user_system = true,
   $service = 'sonar', $installroot = '/usr/local', $home = '/var/local/sonar',
-  $port = 9000, $download_url = 'http://dist.sonar.codehaus.org', 
+  $port = 9000, $download_url = 'http://dist.sonar.codehaus.org',
   $context_path = '/', $arch = '', $ldap = {}, $crowd = {},
   $jdbc = {
     url               => 'jdbc:h2:tcp://localhost:9092/sonar',
@@ -64,7 +63,7 @@ class sonarqube (
   $script = "${installdir}/bin/${bin_folder}/sonar.sh"
 
   if ! defined(Package[unzip]) {
-    package { unzip:
+    package { 'unzip':
       ensure => present,
       before => Exec[untar]
     }
@@ -116,7 +115,7 @@ class sonarqube (
   } ->
   file { $script:
     mode    => '0755',
-    content => template("sonarqube/sonar.sh.erb"),
+    content => template('sonarqube/sonar.sh.erb'),
   }
   file { "/etc/init.d/${service}":
     ensure  => link,
