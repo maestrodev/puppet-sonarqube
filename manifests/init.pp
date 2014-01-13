@@ -63,7 +63,7 @@ class sonarqube (
   $script = "${installdir}/bin/${bin_folder}/sonar.sh"
 
   if ! defined(Package[unzip]) {
-    package { unzip:
+    package { 'unzip':
       ensure => present,
       before => Exec[untar]
     }
@@ -115,7 +115,7 @@ class sonarqube (
   } ->
   file { $script:
     mode    => '0755',
-    content => template("sonarqube/sonar.sh.erb"),
+    content => template('sonarqube/sonar.sh.erb'),
   }
   file { "/etc/init.d/${service}":
     ensure  => link,
