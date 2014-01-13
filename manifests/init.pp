@@ -11,14 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 class sonarqube (
   $version = '3.7.4',
   $user = 'sonar',
   $group = 'sonar',
   $user_system = true,
   $service = 'sonar', $installroot = '/usr/local', $home = '/var/local/sonar',
-  $port = 9000, $download_url = 'http://dist.sonar.codehaus.org', 
+  $port = 9000, $download_url = 'http://dist.sonar.codehaus.org',
   $context_path = '/', $arch = '', $ldap = {}, $crowd = {},
   $jdbc = {
     url               => 'jdbc:h2:tcp://localhost:9092/sonar',
