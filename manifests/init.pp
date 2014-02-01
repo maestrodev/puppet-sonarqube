@@ -17,6 +17,7 @@ class sonarqube (
   $group = 'sonar',
   $user_system = true,
   $service = 'sonar', $installroot = '/usr/local', $home = '/var/local/sonar',
+  $host = undef,
   $port = 9000, $download_url = 'http://dist.sonar.codehaus.org',
   $context_path = '/', $arch = '', $ldap = {}, $crowd = {},
   $jdbc = {

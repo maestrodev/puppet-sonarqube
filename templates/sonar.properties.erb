@@ -13,7 +13,11 @@
 # These settings are ignored when the war file is deployed to a JEE server.
 #---------------------------------------------------------
 # Listen host/port and context path (for example / or /sonar). Default values are 0.0.0.0:9000/.
+<% if @host -%>
+sonar.web.host:                           <%= @host %>
+<% else -%>
 #sonar.web.host:                           0.0.0.0
+<% end -%>
 sonar.web.port:                           <%= @port %>
 <% if has_variable?('context_path') -%>
 sonar.web.context:                        <%= @context_path %>
