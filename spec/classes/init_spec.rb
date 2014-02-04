@@ -3,7 +3,7 @@ require 'spec_helper'
 SONAR_PROPERTIES = "/usr/local/sonar/conf/sonar.properties"
 
 describe 'sonarqube' do
-  context "when crowd configuration is supplied" do
+  context "when crowd configuration is supplied", :compile do
     let(:params) { { :crowd => {
       'application' => 'crowdapplication',
       'service_url' => 'crowdserviceurl',
@@ -14,7 +14,7 @@ describe 'sonarqube' do
 
     it { should contain_file(SONAR_PROPERTIES) }
     it 'should generate sonar.properties config for crowd' do
-      content = catalogue.resource('file', SONAR_PROPERTIES).send(:parameters)[:content]
+      content = subject.resource('file', SONAR_PROPERTIES).send(:parameters)[:content]
       content.should =~ %r[sonar\.authenticator\.class: org\.sonar\.plugins\.crowd\.CrowdAuthenticator]
       content.should =~ %r[crowd\.url: crowdserviceurl]
       content.should =~ %r[crowd\.application: crowdapplication]
@@ -22,21 +22,21 @@ describe 'sonarqube' do
     end
   end
 
-  context "when no crowd configuration is supplied" do
+  context "when no crowd configuration is supplied", :compile do
     it { should contain_sonarqube__plugin('sonar-crowd-plugin').with_ensure('absent') }
 
     it { should contain_file(SONAR_PROPERTIES) }
     it 'should generate sonar.properties config without crowd' do
-      content = catalogue.resource('file', SONAR_PROPERTIES).send(:parameters)[:content]
+      content = subject.resource('file', SONAR_PROPERTIES).send(:parameters)[:content]
       content.should_not =~ %r[crowd]
     end
   end
 
-  context "when unzip package is not defined" do
+  context "when unzip package is not defined", :compile do
     it { should contain_package('unzip').with_ensure('present') }
   end
 
-  context "when unzip package is already defined" do
+  context "when unzip package is already defined", :compile do
     let(:pre_condition) { %Q[
       package { 'unzip': ensure => installed }
     ] }
