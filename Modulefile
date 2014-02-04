@@ -1,5 +1,5 @@
 name 'maestrodev-sonarqube'
-version '2.0.1'
+version '2.0.2'
 
 author 'maestrodev'
 license 'Apache License, Version 2.0'
