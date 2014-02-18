@@ -16,7 +16,8 @@ class sonarqube (
   $user = 'sonar',
   $group = 'sonar',
   $user_system = true,
-  $service = 'sonar', $installroot = '/usr/local', $home = '/var/local/sonar',
+  $service = 'sonar', $installroot = '/usr/local',
+  $home = undef,
   $host = undef,
   $port = 9000, $download_url = 'http://dist.sonar.codehaus.org',
   $context_path = '/', $arch = '', $ldap = {}, $crowd = {},
@@ -59,8 +60,29 @@ class sonarqube (
   }
   $bin_folder = $arch ? { '' => "${arch1}-${arch2}", default => $arch }
 
+  if versioncmp($version, '4.0') < 0 {
+    $package_name = 'sonar'
+  }
+  else {
+    $package_name = 'sonarqube'
+
+  }
+
+  if $home != undef {
+    $real_home = $home
+  }
+  else {
+    $real_home = "/var/local/sonar"
+  }
+  Sonarqube::Move_to_home {
+    home => $real_home,
+  }
+
+  $extensions_dir = "${real_home}/extensions"
+  $plugin_dir = "${extensions_dir}/plugins"
+
   $installdir = "${installroot}/${service}"
-  $tmpzip = "/usr/local/src/${service}-${version}.zip"
+  $tmpzip = "/usr/local/src/${package_name}-${version}.zip"
   $script = "${installdir}/bin/${bin_folder}/sonar.sh"
 
   if ! defined(Package[unzip]) {
@@ -72,7 +94,7 @@ class sonarqube (
 
   user { $user:
     ensure     => present,
-    home       => $home,
+    home       => $real_home,
     managehome => false,
     system     => $user_system,
   } ->
@@ -81,8 +103,8 @@ class sonarqube (
     system  => $user_system,
   } ->
   wget::fetch {
-    'download-sonar':
-      source      => "${download_url}/sonar-${version}.zip",
+    "download-sonar":
+      source      => "${download_url}/${package_name}-${version}.zip",
       destination => $tmpzip,
   } ->
 
@@ -92,16 +114,16 @@ class sonarqube (
   # installing new extensions and plugins over the old ones, reusing the db,...
 
   # Sonar home
-  file { $home:
+  file { $real_home:
     ensure => directory,
     mode   => '0700',
   } ->
-  file { "${installroot}/sonar-${version}":
+  file { "${installroot}/${package_name}-${version}":
     ensure => directory,
   } ->
   file { $installdir:
     ensure => link,
-    target => "${installroot}/sonar-${version}",
+    target => "${installroot}/${package_name}-${version}",
   } ->
   sonarqube::move_to_home { 'data': } ->
   sonarqube::move_to_home { 'extras': } ->
@@ -111,8 +133,8 @@ class sonarqube (
   # ===== Install Sonar =====
 
   exec { 'untar':
-    command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/sonar-${version} && chown -R ${user}:${group} ${home}",
-    creates => "${installroot}/sonar-${version}/bin",
+    command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/${package_name}-${version} && chown -R ${user}:${group} ${real_home}",
+    creates => "${installroot}/${package_name}-${version}/bin",
   } ->
   file { $script:
     mode    => '0755',
@@ -127,11 +149,12 @@ class sonarqube (
   file { "${installdir}/conf/sonar.properties":
     content => template('sonarqube/sonar.properties.erb'),
     require => Exec['untar'],
-    notify  => Service[$service],
+    notify  => Service['sonarqube'],
     mode    => '0600'
-  } ->
+  }
+
   # The plugins directory. Useful to later reference it from the plugin definition
-  file { "${home}/extensions/plugins":
+  file { $plugin_dir:
     ensure => directory,
   } ->
 
@@ -140,17 +163,15 @@ class sonarqube (
     ensure     => empty($ldap) ? {true => absent, false => present},
     artifactid => 'sonar-ldap-plugin',
     version    => '1.3',
-    notify     => Service[$service],
-  } ->
+  }
 
   sonarqube::plugin { 'sonar-crowd-plugin' :
     ensure     => empty($crowd) ? {true => absent, false => present},
     artifactid => 'sonar-crowd-plugin',
     version    => '1.0',
-    notify     => Service[$service],
-  } ->
+  }
 
-  service { $service:
+  service { 'sonarqube':
     ensure     => running,
     name       => $service,
     hasrestart => true,

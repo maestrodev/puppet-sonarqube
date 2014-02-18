@@ -17,12 +17,13 @@
 # A puppet definition for Sonar plugin installation
 #
 define sonarqube::plugin(
-  $artifactid = $name, $version,
-  $groupid = 'org.codehaus.sonar-plugins', $ensure = present) {
+  $artifactid = $name,
+  $version,
+  $groupid = 'org.codehaus.sonar-plugins',
+  $ensure = present) {
 
-  $plugin_dir  = "${sonarqube::home}/extensions/plugins"
   $plugin_name = "${artifactid}-${version}.jar"
-  $plugin      = "${plugin_dir}/${plugin_name}"
+  $plugin      = "${sonarqube::plugin_dir}/${plugin_name}"
 
   # Install plugin
   if $ensure == present {
@@ -35,20 +36,20 @@ define sonarqube::plugin(
       artifactid => $artifactid,
       version    => $version,
       before     => File[$plugin],
-      require    => File[$plugin_dir],
+      require    => File[$sonarqube::plugin_dir],
     }
     file { $plugin:
       ensure => $ensure,
       source => "/tmp/${plugin_name}",
       owner  => $sonarqube::user,
       group  => $sonarqube::group,
-      notify => Service['sonar'],
+      notify => Service['sonarqube'],
     }
   } else {
     # Uninstall plugin if absent
     file { $plugin:
       ensure => $ensure,
-      notify => Service['sonar'],
+      notify => Service['sonarqube'],
     }
   }
 }
