@@ -128,6 +128,7 @@ class sonarqube (
     content => template('sonarqube/sonar.properties.erb'),
     require => Exec['untar'],
     notify  => Service[$service],
+    mode    => '0600'
   } ->
   # The plugins directory. Useful to later reference it from the plugin definition
   file { "${home}/extensions/plugins":
