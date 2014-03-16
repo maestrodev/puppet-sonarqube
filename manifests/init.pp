@@ -16,17 +16,22 @@ class sonarqube (
   $user = 'sonar',
   $group = 'sonar',
   $user_system = true,
-  $service = 'sonar', $installroot = '/usr/local',
+  $service = 'sonar',
+  $installroot = '/usr/local',
   $home = undef,
   $host = undef,
-  $port = 9000, $download_url = 'http://dist.sonar.codehaus.org',
-  $context_path = '/', $arch = '', $ldap = {}, $crowd = {},
+  $port = 9000,
+  $download_url = 'http://dist.sonar.codehaus.org',
+  $context_path = '/',
+  $arch = $sonarqube::params::arch,
+  $ldap = {}, $crowd = {},
   $jdbc = {
     url               => 'jdbc:h2:tcp://localhost:9092/sonar',
     username          => 'sonar',
     password          => 'sonar',
   },
-  $log_folder = '/var/local/sonar/logs', $profile = false) {
+  $log_folder = '/var/local/sonar/logs',
+  $profile = false) inherits sonarqube::params {
 
   Exec {
     path => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin'
@@ -39,33 +44,11 @@ class sonarqube (
   # wget from https://github.com/maestrodev/puppet-wget
   include wget
 
-  # calculate in what folder is the binary to use for this architecture
-  $arch1 = $::kernel ? {
-    'windows' => 'windows',
-    'sunos'   => 'solaris',
-    'darwin'  => 'macosx',
-    default   => 'linux',
-  }
-  if $arch1 != 'macosx' {
-    $arch2 = $::architecture ? {
-      'x86_64' => 'x86-64',
-      'amd64'  => 'x86-64',
-      default  => 'x86-32',
-    }
-  } else {
-    $arch2 = $::architecture ? {
-      'x86_64' => 'universal-64',
-      default  => 'universal-32',
-    }
-  }
-  $bin_folder = $arch ? { '' => "${arch1}-${arch2}", default => $arch }
-
   if versioncmp($version, '4.0') < 0 {
     $package_name = 'sonar'
   }
   else {
     $package_name = 'sonarqube'
-
   }
 
   if $home != undef {
@@ -83,7 +66,7 @@ class sonarqube (
 
   $installdir = "${installroot}/${service}"
   $tmpzip = "/usr/local/src/${package_name}-${version}.zip"
-  $script = "${installdir}/bin/${bin_folder}/sonar.sh"
+  $script = "${installdir}/bin/${arch}/sonar.sh"
 
   if ! defined(Package[unzip]) {
     package { 'unzip':
