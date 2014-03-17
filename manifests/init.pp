@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 class sonarqube (
-  $version = '3.7.4',
+  $version = '4.1.2',
   $user = 'sonar',
   $group = 'sonar',
   $user_system = true,
@@ -145,7 +145,7 @@ class sonarqube (
   sonarqube::plugin { 'sonar-ldap-plugin' :
     ensure     => empty($ldap) ? {true => absent, false => present},
     artifactid => 'sonar-ldap-plugin',
-    version    => '1.3',
+    version    => '1.4',
   }
 
   sonarqube::plugin { 'sonar-crowd-plugin' :

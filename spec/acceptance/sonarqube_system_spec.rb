@@ -48,7 +48,7 @@ describe 'sonarqube' do
         }
       ) }
       it { apply_manifest(pp, :catch_failures => true) }
-      it { file("#{home}/extensions/plugins/sonar-ldap-plugin-1.3.jar").should be_file }
+      it { file("#{home}/extensions/plugins/sonar-ldap-plugin-1.4.jar").should be_file }
 
       it { file("#{installroot}/conf/sonar.properties").content.should match(%r{^ldap.url=ldap://myserver.mycompany.com}) }
     end
