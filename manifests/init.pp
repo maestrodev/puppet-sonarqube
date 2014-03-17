@@ -122,7 +122,7 @@ class sonarqube (
   file { $script:
     mode    => '0755',
     content => template('sonarqube/sonar.sh.erb'),
-  }
+  } ->
   file { "/etc/init.d/${service}":
     ensure  => link,
     target  => $script,
@@ -139,7 +139,7 @@ class sonarqube (
   # The plugins directory. Useful to later reference it from the plugin definition
   file { $plugin_dir:
     ensure => directory,
-  } ->
+  }
 
   # For convenience, provide "built-in" support for the Sonar LDAP plugin.
   sonarqube::plugin { 'sonar-ldap-plugin' :
