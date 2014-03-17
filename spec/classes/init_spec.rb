@@ -3,6 +3,17 @@ require 'spec_helper'
 SONAR_PROPERTIES = "/usr/local/sonar/conf/sonar.properties"
 
 describe 'sonarqube' do
+
+  context "when installing version 3", :compile do
+    let(:params) {{ :version => '3.7.4' }}
+    it { should contain_wget__fetch('download-sonar').with_source('http://dist.sonar.codehaus.org/sonar-3.7.4.zip') }
+  end
+
+  context "when installing version 4", :compile do
+    let(:params) {{ :version => '4.1.2' }}
+    it { should contain_wget__fetch('download-sonar').with_source('http://dist.sonar.codehaus.org/sonarqube-4.1.2.zip') }
+  end
+
   context "when crowd configuration is supplied", :compile do
     let(:params) { { :crowd => {
       'application' => 'crowdapplication',
