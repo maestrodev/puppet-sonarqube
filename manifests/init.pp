@@ -31,6 +31,8 @@ class sonarqube (
     password          => 'sonar',
   },
   $log_folder = '/var/local/sonar/logs',
+  $updatecenter = 'true',
+  $http_proxy = {},
   $profile = false) inherits sonarqube::params {
 
   Exec {

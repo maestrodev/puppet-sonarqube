@@ -117,22 +117,24 @@ sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
 
 # The Update Center requires an internet connection to request http://update.sonarsource.org
 # It is activated by default:
-#sonar.updatecenter.activate=true
+sonar.updatecenter.activate=<%= @updatecenter %>
 
+<% if !@http_proxy.empty? -%>
 # HTTP proxy (default none)
-#http.proxyHost=
-#http.proxyPort=
+http.proxyHost=<%= @http_proxy['host'] %>
+http.proxyPort=<%= @http_proxy['port'] %>
 
 # NT domain name if NTLM proxy is used
-#http.auth.ntlm.domain=
+http.auth.ntlm.domain=<%= @http_proxy['ntlm_domain'] %>
+
+# proxy authentication. The 2 following properties are used for HTTP and SOCKS proxies.
+http.proxyUser=<%= @http_proxy['user'] %>
+http.proxyPassword=<%= @http_proxy['password'] %>
+<% end -%>
 
 # SOCKS proxy (default none)
 #socksProxyHost=
 #socksProxyPort=
-
-# proxy authentication. The 2 following properties are used for HTTP and SOCKS proxies.
-#http.proxyUser=
-#http.proxyPassword=
 
 #---------------------------------------------------------
 # NOTIFICATIONS

@@ -32,6 +32,14 @@ or
       download_url => 'http://dist.sonar.codehaus.org',
       jdbc         => $jdbc,
       log_folder   => '/var/local/sonar/logs',
+      updatecenter => 'true,
+      http_proxy   => {
+      	host        => 'proxy.example.com',
+      	port        => '8080',
+      	ntlm_domain => '',
+      	user        => '',
+      	password    => '',
+      }
     }
 
 ## SonarQube Plugins
