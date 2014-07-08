@@ -19,6 +19,7 @@ sonar.web.host:                           <%= @host %>
 #sonar.web.host:                           0.0.0.0
 <% end -%>
 sonar.web.port:                           <%= @port %>
+sonar.ajp.port:                           <%= @portAjp %>
 <% if has_variable?('context_path') -%>
 sonar.web.context:                        <%= @context_path %>
 <% end -%>
