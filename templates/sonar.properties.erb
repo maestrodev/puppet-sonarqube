@@ -157,6 +157,7 @@ sonar.security.realm=LDAP
 sonar.security.savePassword=true
 
 ldap.url=<%= @ldap['url'] %>
+
 <% if @ldap['bind_dn'] -%>
 ldap.bindDn=<%= @ldap['bind_dn'] %>
 <% end -%>
@@ -167,27 +168,9 @@ ldap.bindPassword=<%= @ldap['bind_password'] %>
 ldap.authentication=<%= @ldap['authentication'] %>
 <% end -%>
 
-# (omit if you use autodiscovery) URL of the LDAP server.
-# If you are using ldaps, then you should install server certificate into java truststore.
-# eg. ldap://localhost:10389
-ldap.url: ldap<%= "s" if @ldap['ssl'] %>://<%= @ldap['hostname'] %>:<%= @ldap['port'] %>
-
-# (optional) Distinguished Name (DN) of the root node in LDAP from which to search for users,
-# eg. "ou=users,o=mycompany"
+<% if @ldap['user_base_dn'] -%>
 ldap.user.baseDn: <%= @ldap['user_base_dn'] %>
-
-# (optional) Bind DN is the username of an LDAP user to connect (or bind) with.
-# This is a Distinguished Name of a user who has administrative rights,
-# eg. "cn=sonar,ou=users,o=mycompany". Leave blank for anonymous access to the LDAP directory.
-ldap.bindDn: <%= @ldap['bind_dn'] %>
-
-# (optional) Bind Password is the password of the user to connect with.
-# Leave blank for anonymous access to the LDAP directory.
-ldap.bindPassword: <%= @ldap['bind_password'] %>
-
-# Login Attribute is the attribute in LDAP holding the user's login.
-# Default is '(&(objectClass=inetOrgPerson)(uid={login}))'. Set
-# '(&(objectClass=user)(sAMAccountName={login}))' for Microsoft Active Directory
+<% end -%>
 <% if @ldap['user_request'] -%>
 ldap.user.request: <%= @ldap['user_request'] %>
 <% end -%>
@@ -198,25 +181,6 @@ ldap.user.realNameAttribute=<%= @ldap['user_real_name_attribute'] %>
 ldap.user.emailAttribute=<%= @ldap['user_email_attribute'] %>
 <% end -%>
 
-ldap.group.baseDn: <%= @ldap['group_dn'] %>
-ldap.group.request: <%= @ldap['group_request'] %>
-ldap.group.idAttribute: <%= @ldap['group_id_attribute'] %>
-
-# (advanced option) See http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html
-# Default is 'simple'. Possible values: 'simple', 'CRAM-MD5', 'DIGEST-MD5', 'GSSAPI'.
-#ldap.authentication: DIGEST-MD5
-
-# (advanced option)
-# See
-# http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html
-# http://java.sun.com/products/jndi/tutorial/ldap/security/crammd5.html
-# eg. example.org
-#ldap.realm:
-
-# (advanced option) Context factory class.
-# Default is 'com.sun.jndi.ldap.LdapCtxFactory'.
-#ldap.contextFactoryClass: com.sun.jndi.ldap.LdapCtxFactory
-
 <% if @ldap['group_base_dn'] -%>
 ldap.group.baseDn=<%= @ldap['group_base_dn'] %>
 <% end -%>
@@ -226,6 +190,7 @@ ldap.group.request=<%= @ldap['group_request'] %>
 <% if @ldap['group_id_attribute'] -%>
 ldap.group.idAttribute=<%= @ldap['group_id_attribute'] %>
 <% end -%>
+
 <% end -%>
 
 <% if !@crowd.empty? %>
