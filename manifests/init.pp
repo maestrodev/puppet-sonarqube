@@ -12,30 +12,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 class sonarqube (
-  $version = '4.1.2',
-  $user = 'sonar',
-  $group = 'sonar',
-  $user_system = true,
-  $service = 'sonar',
-  $installroot = '/usr/local',
-  $home = undef,
-  $host = undef,
-  $port = 9000,
-  $portAjp = -1,
+  $version      = '4.1.2',
+  $user         = 'sonar',
+  $group        = 'sonar',
+  $user_system  = true,
+  $service      = 'sonar',
+  $installroot  = '/usr/local',
+  $home         = undef,
+  $host         = undef,
+  $port         = 9000,
+  $portAjp      = -1,
   $download_url = 'http://dist.sonar.codehaus.org',
   $context_path = '/',
-  $arch = $sonarqube::params::arch,
-  $ldap = {}, $crowd = {},
-  $jdbc = {
-    url               => 'jdbc:h2:tcp://localhost:9092/sonar',
-    username          => 'sonar',
-    password          => 'sonar',
+  $arch         = $sonarqube::params::arch,
+  $ldap         = {},
+  $crowd        = {},
+  $jdbc         = {
+    url      => 'jdbc:h2:tcp://localhost:9092/sonar',
+    username => 'sonar',
+    password => 'sonar',
   },
-  $log_folder = '/var/local/sonar/logs',
-  $updatecenter = 'true',
-  $http_proxy = {},
-  $profile = false) inherits sonarqube::params {
-
+  $log_folder   = '/var/local/sonar/logs',
+  $updatecenter = true,
+  $http_proxy   = {},
+  $profile      = false
+) inherits sonarqube::params {
   Exec {
     path => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin'
   }
@@ -58,7 +59,7 @@ class sonarqube (
     $real_home = $home
   }
   else {
-    $real_home = "/var/local/sonar"
+    $real_home = '/var/local/sonar'
   }
   Sonarqube::Move_to_home {
     home => $real_home,
@@ -89,7 +90,7 @@ class sonarqube (
     system  => $user_system,
   } ->
   wget::fetch {
-    "download-sonar":
+    'download-sonar':
       source      => "${download_url}/${package_name}-${version}.zip",
       destination => $tmpzip,
   } ->
@@ -110,6 +111,7 @@ class sonarqube (
   file { $installdir:
     ensure => link,
     target => "${installroot}/${package_name}-${version}",
+    notify => Service['sonarqube'],
   } ->
   sonarqube::move_to_home { 'data': } ->
   sonarqube::move_to_home { 'extras': } ->
@@ -121,6 +123,7 @@ class sonarqube (
   exec { 'untar':
     command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/${package_name}-${version} && chown -R ${user}:${group} ${real_home}",
     creates => "${installroot}/${package_name}-${version}/bin",
+    notify  => Service['sonarqube'],
   } ->
   file { $script:
     mode    => '0755',
@@ -146,13 +149,19 @@ class sonarqube (
 
   # For convenience, provide "built-in" support for the Sonar LDAP plugin.
   sonarqube::plugin { 'sonar-ldap-plugin' :
-    ensure     => empty($ldap) ? {true => absent, false => present},
+    ensure     => empty($ldap) ? {
+      true  => absent,
+      false => present
+    },
     artifactid => 'sonar-ldap-plugin',
     version    => '1.4',
   }
 
   sonarqube::plugin { 'sonar-crowd-plugin' :
-    ensure     => empty($crowd) ? {true => absent, false => present},
+    ensure     => empty($crowd) ? {
+      true  => absent,
+      false => present
+    },
     artifactid => 'sonar-crowd-plugin',
     version    => '1.0',
   }
