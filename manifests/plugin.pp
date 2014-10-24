@@ -17,11 +17,11 @@
 # A puppet definition for Sonar plugin installation
 #
 define sonarqube::plugin(
-  $artifactid = $name,
   $version,
-  $groupid = 'org.codehaus.sonar-plugins',
-  $ensure = present) {
-
+  $ensure     = present,
+  $artifactid = $name,
+  $groupid    = 'org.codehaus.sonar-plugins',
+) {
   $plugin_name = "${artifactid}-${version}.jar"
   $plugin      = "${sonarqube::plugin_dir}/${plugin_name}"
 
