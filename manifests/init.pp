@@ -110,6 +110,7 @@ class sonarqube (
   file { $installdir:
     ensure => link,
     target => "${installroot}/${package_name}-${version}",
+    notify  => Service['sonarqube'],
   } ->
   sonarqube::move_to_home { 'data': } ->
   sonarqube::move_to_home { 'extras': } ->
@@ -121,6 +122,7 @@ class sonarqube (
   exec { 'untar':
     command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/${package_name}-${version} && chown -R ${user}:${group} ${real_home}",
     creates => "${installroot}/${package_name}-${version}/bin",
+    notify  => Service['sonarqube'],
   } ->
   file { $script:
     mode    => '0755',
