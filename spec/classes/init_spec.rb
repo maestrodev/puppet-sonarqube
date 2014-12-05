@@ -4,6 +4,14 @@ SONAR_PROPERTIES = "/usr/local/sonar/conf/sonar.properties"
 
 describe 'sonarqube' do
 
+  let(:facts) {{
+    :kernel => 'linux',
+    :architecture => 'amd64',
+    :operatingsystem => 'CentOS',
+    :http_proxy => '',
+    :maven_version => '3.0.5',
+  }}
+
   context "when installing version 3", :compile do
     let(:params) {{ :version => '3.7.4' }}
     it { should contain_wget__fetch('download-sonar').with_source('http://dist.sonar.codehaus.org/sonar-3.7.4.zip') }
