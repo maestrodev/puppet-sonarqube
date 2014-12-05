@@ -1,6 +1,8 @@
 Puppet-SonarQube
 ================
 
+[![Build Status](https://travis-ci.org/maestrodev/puppet-sonarqube.svg?branch=master)](https://travis-ci.org/maestrodev/puppet-sonarqube)
+
 A puppet recipe to install SonarQube (former Sonar)
 
 
