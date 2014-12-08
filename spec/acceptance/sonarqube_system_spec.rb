@@ -40,6 +40,7 @@ describe 'sonarqube' do
         $ldap = {
           url          => 'ldap://myserver.mycompany.com',
           user_base_dn => 'ou=Users,dc=mycompany,dc=com',
+          local_users  => ['foo', 'bar'],
         }
 
         class { 'sonarqube' :
@@ -51,6 +52,8 @@ describe 'sonarqube' do
       it { file("#{home}/extensions/plugins/sonar-ldap-plugin-1.4.jar").should be_file }
 
       it { file("#{installroot}/conf/sonar.properties").content.should match(%r{^ldap.url=ldap://myserver.mycompany.com}) }
+
+      it { file("#{installroot}/conf/sonar.properties").content.should match(%r{^sonar.security.localUsers=foo,bar}) }
     end
   end
 

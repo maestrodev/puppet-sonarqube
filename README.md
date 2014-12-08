@@ -63,6 +63,7 @@ The `sonarqube` class actually includes "built-in" support for the LDAP plugin t
     $ldap = {
       url          => 'ldap://myserver.mycompany.com',
       user_base_dn => 'ou=Users,dc=mycompany,dc=com',
+      local_users  => ['foo', 'bar'],
     }
 
     class { 'sonarqube' :
