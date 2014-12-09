@@ -4,6 +4,8 @@ require 'puppet-lint/tasks/puppet-lint'
 CLEAN.include('spec/fixtures/manifests/', 'spec/fixtures/modules/', 'doc', 'pkg')
 CLOBBER.include('.tmp', '.librarian')
 
+ENV['STRICT_VARIABLES']='yes'
+
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet_blacksmith/rake_tasks'
 
