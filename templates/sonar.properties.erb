@@ -155,6 +155,9 @@ sonar.notifications.delay=60
 # Activates the plugin. Leave blank or comment out to use default sonar authentication.
 sonar.security.realm=LDAP
 sonar.security.savePassword=true
+<% if @ldap['local_users'] -%>
+sonar.security.localUsers=<%= [@ldap['local_users']].flatten.join(',') %>
+<% end -%>
 
 ldap.url=<%= @ldap['url'] %>
 
