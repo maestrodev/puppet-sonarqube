@@ -21,10 +21,14 @@ class sonarqube::runner::install inherits sonarqube::runner {
     command => "unzip -o ${tmpzip} -d ${installroot}",
     creates => "${installroot}/sonar-runner-${version}/bin",
     require => Wget::Fetch['download-sonar-runner'],
-  } ->
+  }
 
   # Sonar settings for terminal sessions.
-  file { "/etc/environment":
-    content => inline_template("SONAR_RUNNER_HOME=/usr/local/sonar-runner\nPATH=$PATH:/usr/local/sonar-runner/bin\n")
+  file { "/etc/profile.d/sonarhome.sh":
+    content => "export SONAR_RUNNER_HOME=/usr/local/sonar-runner"
+  }
+  file { '/usr/bin/sonar-runner':
+    ensure => 'link',
+    target => '/var/lib/sonar-runner/bin/sonar-runner',
   }
 }
