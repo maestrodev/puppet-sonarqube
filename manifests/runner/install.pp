@@ -1,4 +1,9 @@
-class sonarqube::runner::install inherits sonarqube::runner {
+class sonarqube::runner::install (
+  $package_name,
+  $version,
+  $download_url,
+  $installroot,
+) {
   include wget
 
   $tmpzip = "/usr/local/src/${package_name}-dist-${version}.zip"

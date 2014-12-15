@@ -12,7 +12,7 @@ class sonarqube::runner (
     username => 'sonar',
     password => 'sonar',
   },
-) inherits sonarqube::params {
+) {
   validate_string($package_name)
   validate_absolute_path($installroot)
 
@@ -22,8 +22,17 @@ class sonarqube::runner (
 
   anchor { 'sonarqube::runner::begin': } ->
   class { '::sonarqube::runner::install':
+    package_name => $package_name,
+    version => $version,
+    download_url => $download_url,
+    installroot => $installroot,
     require => Class[ 'sonarqube' ],
   } ->
-  class { '::sonarqube::runner::config': } ~>
+  class { '::sonarqube::runner::config':
+    package_name => $package_name,
+    version => $version,
+    installroot => $installroot,
+    jdbc => $jdbc,
+  } ~>
   anchor { 'sonarqube::runner::end': }
 }
