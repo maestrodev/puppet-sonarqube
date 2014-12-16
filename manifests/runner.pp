@@ -23,16 +23,16 @@ class sonarqube::runner (
   anchor { 'sonarqube::runner::begin': } ->
   class { '::sonarqube::runner::install':
     package_name => $package_name,
-    version => $version,
+    version      => $version,
     download_url => $download_url,
-    installroot => $installroot,
-    require => Class[ 'sonarqube' ],
+    installroot  => $installroot,
+    require      => Class[ 'sonarqube' ],
   } ->
   class { '::sonarqube::runner::config':
     package_name => $package_name,
-    version => $version,
-    installroot => $installroot,
-    jdbc => $jdbc,
+    version      => $version,
+    installroot  => $installroot,
+    jdbc         => $jdbc,
   } ~>
   anchor { 'sonarqube::runner::end': }
 }

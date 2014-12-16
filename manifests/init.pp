@@ -86,8 +86,8 @@ class sonarqube (
     system     => $user_system,
   } ->
   group { $group:
-    ensure  => present,
-    system  => $user_system,
+    ensure => present,
+    system => $user_system,
   } ->
   wget::fetch {
     'download-sonar':
@@ -130,8 +130,8 @@ class sonarqube (
     content => template('sonarqube/sonar.sh.erb'),
   } ->
   file { "/etc/init.d/${service}":
-    ensure  => link,
-    target  => $script,
+    ensure => link,
+    target => $script,
   } ->
 
   # Sonar configuration files

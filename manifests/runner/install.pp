@@ -29,8 +29,8 @@ class sonarqube::runner::install (
   }
 
   # Sonar settings for terminal sessions.
-  file { "/etc/profile.d/sonarhome.sh":
-    content => "export SONAR_RUNNER_HOME=/usr/local/sonar-runner"
+  file { '/etc/profile.d/sonarhome.sh':
+    content => 'export SONAR_RUNNER_HOME=/usr/local/sonar-runner'
   }
   file { '/usr/bin/sonar-runner':
     ensure => 'link',
