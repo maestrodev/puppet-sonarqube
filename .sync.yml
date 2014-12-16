@@ -1,0 +1,6 @@
+spec/spec_helper_acceptance.rb:
+  modules:
+    - name: maestrodev-maven
+      version: 1.0.0
+    - name: puppetlabs-java
+      version: 1.0.1
