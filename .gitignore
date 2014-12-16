@@ -1,9 +1,40 @@
-.idea
-.rvmrc
-.project
-.librarian/
-.tmp/
-doc/
+# This file is managed centrally by modulesync
+#   https://github.com/maestrodev/puppet-modulesync
+
+## MAC OS
+.DS_Store
+
+## TEXTMATE
+*.tmproj
+tmtags
+
+## EMACS
+*~
+\#*
+.\#*
+
+## VIM
+*.swp
+*.swo
+tags
+
+## Bundler
+.bundle
+vendor/
+
+## rbenv / rvm
+.rbenv*
+.rvmrc*
+.ruby-*
+
+## rspec
 spec/fixtures/
+
+## Puppet module
 pkg/
-.rspec_system/
+coverage/
+
+## Librarian-puppet
+.tmp/
+.librarian/
+
