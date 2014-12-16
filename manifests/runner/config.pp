@@ -1,3 +1,4 @@
+# Configuration of SonarQube Runner
 class sonarqube::runner::config (
   $package_name,
   $version,

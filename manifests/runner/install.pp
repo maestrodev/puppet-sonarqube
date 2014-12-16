@@ -1,3 +1,4 @@
+# Installation of SonarQube Runner
 class sonarqube::runner::install (
   $package_name,
   $version,
