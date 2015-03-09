@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 describe 'sonarqube::runner::install' do
-  let(:facts) {{
-    :operatingsystem => 'CentOS',
-    :http_proxy => '',
-  }}
-
   let(:params) {{
     :package_name => 'sonar-runner',
     :version => '2.4',
