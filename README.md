@@ -33,6 +33,7 @@ or
       home         => '/var/local/sonar',
       download_url => 'http://dist.sonar.codehaus.org',
       jdbc         => $jdbc,
+      javaopts     => '-Xmx1024m',
       log_folder   => '/var/local/sonar/logs',
       updatecenter => 'true',
       http_proxy   => {

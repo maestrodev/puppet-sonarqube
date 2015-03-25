@@ -24,6 +24,7 @@ class sonarqube (
   $portAjp      = -1,
   $download_url = 'http://dist.sonar.codehaus.org',
   $context_path = '/',
+  $javaopts     = undef,
   $arch         = $sonarqube::params::arch,
   $ldap         = {},
   $crowd        = {},
