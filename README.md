@@ -2,6 +2,9 @@ Puppet-SonarQube
 ================
 
 [![Build Status](https://travis-ci.org/maestrodev/puppet-sonarqube.svg?branch=master)](https://travis-ci.org/maestrodev/puppet-sonarqube)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/maestrodev/sonarqube.svg)](https://forge.puppetlabs.com/maestrodev/sonarqube)
+[![Puppet Forge](https://img.shields.io/puppetforge/f/maestrodev/sonarqube.svg)](https://forge.puppetlabs.com/maestrodev/sonarqube)
+
 
 A puppet recipe to install SonarQube (former Sonar)
 
