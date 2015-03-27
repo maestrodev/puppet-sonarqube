@@ -43,7 +43,7 @@ deploy:
   provider: puppetforge
   user: maestrodev
   password:
-    secure: "ZKrjzYeK631RHJW+hph81zHXPifW1qFpP5RGdb/Eg9Nu4Pn78LOMOsPod4afm3Y7UEXkYapHCc9biv2PWOLnvRuuN52foS1A9kBhnKbicCCj1z1waj44xYrX5g8eXMKB4ZgQDr52Ms0onjiuQkZ/ufbBXWIRLUVfpLjxcSdAG1M="
+    secure: "Otm0EXhVvdcqG80+M7bQy6gy+xv/x2hJuQm1PyscRAX7zSnHNDgv85DniqGPxnJlLKxjrWwLwzDQ1+UO5WpaBn0/Oiv2U+M8VrmKq9/YkO3XgL93HZNmKKpJnj+SBR6ZaCml00AbwfTLOOBkUBMHwLDlpkClSvB79rYmKJxkDh0="
   on:
     tags: true
     # all_branches is required to use tags
