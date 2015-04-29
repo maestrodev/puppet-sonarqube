@@ -159,6 +159,9 @@ sonar.security.savePassword=true
 <% if @ldap['local_users'] -%>
 sonar.security.localUsers=<%= [@ldap['local_users']].flatten.join(',') %>
 <% end -%>
+<% if @ldap['authenticator_downcase'] -%>
+sonar.authenticator.downcase=<%= @ldap['authenticator_downcase'] %>
+<% end -%>
 
 ldap.url=<%= @ldap['url'] %>
 
