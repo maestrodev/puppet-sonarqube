@@ -148,12 +148,12 @@ sonar.notifications.delay=60
 
 <% if !@ldap.empty? -%>
 #-------------------
-# Sonar LDAP Plugin
-# Reference: http://docs.codehaus.org/display/SONAR/LDAP+Plugin
+# SonarQube LDAP Plugin
+# Reference: http://docs.sonarqube.org/display/SONAR/LDAP+Plugin
 #-------------------
 
-# IMPORTANT : before activation, make sure that one Sonar administrator is defined in the external system
-# Activates the plugin. Leave blank or comment out to use default sonar authentication.
+# IMPORTANT : before activation, make sure that one SonarQube administrator is defined in the external system
+# Activates the plugin. Leave blank or comment out to use default SonarQube authentication.
 sonar.security.realm=LDAP
 <% if @ldap['save_password'] -%>
 sonar.security.savePassword=<%= @ldap['save_password'] %>
