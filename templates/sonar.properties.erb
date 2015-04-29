@@ -31,6 +31,20 @@ sonar.web.context:                        <%= @context_path %>
 #sonar.web.jetty.threads.min:              5
 #sonar.web.jetty.threads.max:              50
 
+# Web server is executed in a dedicated Java process. By default heap size is 768Mb.
+# Use the following property to customize JVM options.
+#    Recommendations:
+#
+#    The HotSpot Server VM is recommended. The property -server should be added if server mode
+#    is not enabled by default on your environment: http://docs.oracle.com/javase/7/docs/technotes/guides/vm/server-class.html
+#
+#    Set min and max memory (respectively -Xms and -Xmx) to the same value to prevent heap
+#    from resizing at runtime.
+#
+<% if @web_java_opts -%>
+sonar.web.javaOpts=<%= @web_java_opts %>
+<% end -%>
+
 #-----------------------------------------------------------------------
 # DATABASE
 #
