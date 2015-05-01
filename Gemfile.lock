@@ -48,7 +48,7 @@ GEM
       archive-tar-minitar
       excon (>= 0.38.0)
       json
-    domain_name (0.5.23)
+    domain_name (0.5.24)
       unf (>= 0.0.5, < 1.0.0)
     excon (0.44.2)
     extlib (0.9.16)
@@ -187,7 +187,7 @@ GEM
       facter (> 1.6, < 3)
       hiera (~> 1.0)
       json_pure
-    puppet-blacksmith (3.3.0)
+    puppet-blacksmith (3.3.1)
       puppet (>= 2.7.16)
       rest-client
     puppet-lint (1.1.0)
@@ -259,7 +259,7 @@ DEPENDENCIES
   beaker-rspec (>= 3.0.0)
   librarian-puppet (>= 2.0.0)
   puppet (>= 2.7)
-  puppet-blacksmith (>= 3.3.0)
+  puppet-blacksmith (>= 3.3.1)
   puppet-lint (>= 1.1.0)
   puppetlabs_spec_helper (>= 0.8.0)
   rake
