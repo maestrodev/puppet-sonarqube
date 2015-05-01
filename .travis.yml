@@ -41,7 +41,7 @@ matrix:
 
 deploy:
   provider: puppetforge
-  user: 
+  user: maestrodev
   password:
     secure: "Otm0EXhVvdcqG80+M7bQy6gy+xv/x2hJuQm1PyscRAX7zSnHNDgv85DniqGPxnJlLKxjrWwLwzDQ1+UO5WpaBn0/Oiv2U+M8VrmKq9/YkO3XgL93HZNmKKpJnj+SBR6ZaCml00AbwfTLOOBkUBMHwLDlpkClSvB79rYmKJxkDh0="
   on:
