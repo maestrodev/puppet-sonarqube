@@ -12,23 +12,21 @@ A puppet recipe to install SonarQube (former Sonar)
 # Usage
 
     class { 'java': }
-    class { 'maven::maven' : } ->
     class { 'sonarqube' :
-      version => '3.7.4',
+      version => '5.1',
     }
 
 or
 
     $jdbc = {
-      url               => 'jdbc:h2:tcp://localhost:9092/sonar',
-      username          => 'sonar',
-      password          => 'sonar',
+      url      => 'jdbc:h2:tcp://localhost:9092/sonar',
+      username => 'sonar',
+      password => 'sonar',
     }
 
-    class { 'maven::maven' : } ->
     class { 'sonarqube' :
       arch         => 'linux-x86-64',
-      version      => '3.7.2',
+      version      => '5.1,
       user         => 'sonar',
       group        => 'sonar',
       service      => 'sonar',
@@ -50,8 +48,13 @@ or
 
 ## SonarQube Plugins
 
-The `sonarqube::plugin` defined type can also be used to install Sonar plugins, e.g.:
+The `sonarqube::plugin` defined type can also be used to install SonarQube plugins. Note that Maven is required to download the plugins then.
 
+    class { 'java': }
+    class { 'maven::maven' : }
+    ->
+    class { 'sonarqube' : }
+    
     sonarqube::plugin { 'sonar-twitter-plugin' :
       groupid    => 'org.codehaus.sonar-plugins',
       artifactid => 'sonar-twitter-plugin',
@@ -70,15 +73,18 @@ The `sonarqube` class actually includes "built-in" support for the LDAP plugin t
       local_users  => ['foo', 'bar'],
     }
 
+    class { 'java': }
+    class { 'maven::maven' : }
+    ->
     class { 'sonarqube' :
       ldap => $ldap,
     }
 
 
-# Module requirements
+# Module Requirements
 
 * maestrodev/wget
-* maestrodev/maven
+* maestrodev/maven (only if additional SonarQube plugins are needed to be installed)
 * puppetlabs/stdlib
 
 # License
