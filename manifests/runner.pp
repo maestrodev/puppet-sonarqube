@@ -26,7 +26,6 @@ class sonarqube::runner (
     version      => $version,
     download_url => $download_url,
     installroot  => $installroot,
-    require      => Class[ 'sonarqube' ],
   } ->
   class { '::sonarqube::runner::config':
     package_name => $package_name,
