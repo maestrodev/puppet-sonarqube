@@ -45,6 +45,55 @@ sonar.web.context:                        <%= @context_path %>
 sonar.web.javaOpts=<%= @web_java_opts %>
 <% end -%>
 
+<% if !@https.empty? -%>
+#-------------------
+# SonarQube Https Configuration
+#-------------------
+# TCP port for incoming HTTPS connections. Disabled when value is -1 (default).
+<% if @https['port'] -%>
+sonar.web.https.port=<%= @https['port'] %>
+<% else -%>
+sonar.web.https.port=-1
+<% end -%>
+# HTTPS - the alias used to for the server certificate in the keystore.
+# If not specified the first key read in the keystore is used.
+<% if @https['keyalias'] -%>
+sonar.web.https.keyAlias=<%= @https['keyalias'] %>
+<% else -%>
+# sonar.web.https.keyAlias=
+<% end -%>
+# HTTPS - the pathname of the keystore file where is stored the server certificate.
+# By default, the pathname is the file ".keystore" in the user home.
+# If keystoreType doesn't need a file use empty value.
+<% if @https['keystoreFile'] -%>
+sonar.web.https.keystoreFile=<%= @https['keystoreFile'] %>
+<% else -%>
+# sonar.web.https.keystoreFile=
+<% end -%>
+# HTTPS - the password used to access the specified keystore file. The default
+# value is the value of sonar.web.https.keyPass.
+<% if @https['keystorePass'] -%>
+sonar.web.https.keystorePass=<%= @https['keystorePass'] %>
+<% else -%>
+# sonar.web.https.keystorePass=
+<% end -%>
+# HTTPS - the password used to access the server certificate from the
+# specified keystore file. The default value is "changeit".
+<% if @https['keyPass'] -%>
+sonar.web.https.keyPass=<%= @https['keyPass'] %>
+<% else -%>
+# sonar.web.https.keyPass=changeit
+<% end -%>
+# HTTPS - the type of keystore file to be used for the server certificate.
+# The default value is JKS (Java KeyStore).
+<% if @https['keystoreType'] -%>
+sonar.web.https.keystoreType=<%= @https['keystoreType'] %>
+<% else -%>
+# sonar.web.https.keystoreType=
+<% end -%>
+
+<% end -%>
+
 #-----------------------------------------------------------------------
 # DATABASE
 #
