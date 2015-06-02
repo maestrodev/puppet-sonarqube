@@ -71,8 +71,8 @@ sonar.web.https.keyAlias=<%= @https['keyalias'] %>
 # By default, the pathname is the file ".keystore" in the user home.
 # If keystoreType doesn't need a file use empty value.
 
-<% if @https['keystoreFile'] -%>
-sonar.web.https.keystoreFile=<%= @https['keystoreFile'] %>
+<% if @https['keystorefile'] -%>
+sonar.web.https.keystoreFile=<%= @https['keystorefile'] %>
 <% else -%>
 # sonar.web.https.keystoreFile=
 <% end -%>
@@ -80,8 +80,8 @@ sonar.web.https.keystoreFile=<%= @https['keystoreFile'] %>
 # HTTPS - the password used to access the specified keystore file. The default
 # value is the value of sonar.web.https.keyPass.
 
-<% if @https['keystorePass'] -%>
-sonar.web.https.keystorePass=<%= @https['keystorePass'] %>
+<% if @https['keystorepass'] -%>
+sonar.web.https.keystorePass=<%= @https['keystorepass'] %>
 <% else -%>
 # sonar.web.https.keystorePass=
 <% end -%>
@@ -89,8 +89,8 @@ sonar.web.https.keystorePass=<%= @https['keystorePass'] %>
 # HTTPS - the password used to access the server certificate from the
 # specified keystore file. The default value is "changeit".
 
-<% if @https['keyPass'] -%>
-sonar.web.https.keyPass=<%= @https['keyPass'] %>
+<% if @https['keypass'] -%>
+sonar.web.https.keyPass=<%= @https['keypass'] %>
 <% else -%>
 # sonar.web.https.keyPass=changeit
 <% end -%>
@@ -98,8 +98,8 @@ sonar.web.https.keyPass=<%= @https['keyPass'] %>
 # HTTPS - the type of keystore file to be used for the server certificate.
 # The default value is JKS (Java KeyStore).
 
-<% if @https['keystoreType'] -%>
-sonar.web.https.keystoreType=<%= @https['keystoreType'] %>
+<% if @https['keystoretype'] -%>
+sonar.web.https.keystoreType=<%= @https['keystoretype'] %>
 <% else -%>
 # sonar.web.https.keystoreType=
 <% end -%>
