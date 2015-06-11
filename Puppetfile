@@ -1,4 +1,4 @@
-forge 'http://forge.puppetlabs.com'
+forge 'https://forgeapi.puppetlabs.com'
 
 mod 'puppetlabs/stdlib', '>=2.3.0'
 mod 'maestrodev/wget',   '>=0.0.1'
