@@ -45,6 +45,83 @@ sonar.web.context:                        <%= @context_path %>
 sonar.web.javaOpts=<%= @web_java_opts %>
 <% end -%>
 
+<% if !@https.empty? -%>
+#-------------------
+# SonarQube Https Configuration
+#-------------------
+
+# TCP port for incoming HTTPS connections. Disabled when value is -1 (default).
+
+<% if @https['port'] -%>
+sonar.web.https.port=<%= @https['port'] %>
+<% else -%>
+sonar.web.https.port=-1
+<% end -%>
+
+# HTTPS - the alias used to for the server certificate in the keystore.
+# If not specified the first key read in the keystore is used.
+
+<% if @https['keyalias'] -%>
+sonar.web.https.keyAlias=<%= @https['keyalias'] %>
+<% else -%>
+# sonar.web.https.keyAlias=
+<% end -%>
+
+# HTTPS - the pathname of the keystore file where is stored the server certificate.
+# By default, the pathname is the file ".keystore" in the user home.
+# If keystoreType doesn't need a file use empty value.
+
+<% if @https['keystorefile'] -%>
+sonar.web.https.keystoreFile=<%= @https['keystorefile'] %>
+<% else -%>
+# sonar.web.https.keystoreFile=
+<% end -%>
+
+# HTTPS - the password used to access the specified keystore file. The default
+# value is the value of sonar.web.https.keyPass.
+
+<% if @https['keystorepass'] -%>
+sonar.web.https.keystorePass=<%= @https['keystorepass'] %>
+<% else -%>
+# sonar.web.https.keystorePass=
+<% end -%>
+
+# HTTPS - the password used to access the server certificate from the
+# specified keystore file. The default value is "changeit".
+
+<% if @https['keypass'] -%>
+sonar.web.https.keyPass=<%= @https['keypass'] %>
+<% else -%>
+# sonar.web.https.keyPass=changeit
+<% end -%>
+
+# HTTPS - the type of keystore file to be used for the server certificate.
+# The default value is JKS (Java KeyStore).
+
+<% if @https['keystoretype'] -%>
+sonar.web.https.keystoreType=<%= @https['keystoretype'] %>
+<% else -%>
+# sonar.web.https.keystoreType=
+<% end -%>
+
+#--------------------------------------------------------------------------------------------------
+# ELASTICSEARCH
+# Elasticsearch is used to facilitate fast and accurate information retrieval.
+# It is executed in a dedicated Java process.
+
+# JVM options of Elasticsearch process
+#    Recommendations:
+#
+#    Use HotSpot Server VM. The property -server should be added if server mode
+#    is not enabled by default on your environment: http://docs.oracle.com/javase/7/docs/technotes/guides/vm/server-class.html
+#
+#    Set min and max memory (respectively -Xms and -Xmx) to the same value to prevent heap
+#    from resizing at runtime.
+#
+<% if @search_java_opts -%>
+sonar.search.javaOpts=<%= @search_java_opts %>
+<% end -%>
+
 #-----------------------------------------------------------------------
 # DATABASE
 #

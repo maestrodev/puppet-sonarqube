@@ -7,6 +7,13 @@ class sonarqube::runner::install (
 ) {
   include wget
 
+  if ! defined(Package[unzip]) {
+    package { 'unzip':
+      ensure => present,
+      before => Exec[unzip-sonar-runner]
+    }
+  }
+
   $tmpzip = "/usr/local/src/${package_name}-dist-${version}.zip"
 
   wget::fetch { 'download-sonar-runner':
@@ -26,7 +33,7 @@ class sonarqube::runner::install (
   exec { 'unzip-sonar-runner':
     command => "unzip -o ${tmpzip} -d ${installroot}",
     creates => "${installroot}/sonar-runner-${version}/bin",
-    require => Wget::Fetch['download-sonar-runner'],
+    require => [Package[unzip], Wget::Fetch['download-sonar-runner']],
   }
 
   # Sonar settings for terminal sessions.
