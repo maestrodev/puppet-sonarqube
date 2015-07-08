@@ -50,6 +50,7 @@ sonar.web.javaOpts=<%= @web_java_opts %>
 # SonarQube Https Configuration
 #-------------------
 
+
 # TCP port for incoming HTTPS connections. Disabled when value is -1 (default).
 
 <% if @https['port'] -%>
@@ -103,6 +104,9 @@ sonar.web.https.keystoreType=<%= @https['keystoretype'] %>
 <% else -%>
 # sonar.web.https.keystoreType=
 <% end -%>
+
+<% end -%>
+
 
 #--------------------------------------------------------------------------------------------------
 # ELASTICSEARCH
