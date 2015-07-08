@@ -25,19 +25,19 @@ or
     }
 
     class { 'sonarqube' :
-      arch         => 'linux-x86-64',
-      version      => '5.1,
-      user         => 'sonar',
-      group        => 'sonar',
-      service      => 'sonar',
-      installroot  => '/usr/local',
-      home         => '/var/local/sonar',
-      download_url => 'http://dist.sonar.codehaus.org',
-      jdbc         => $jdbc,
-      javaopts     => '-Xmx1024m',
-      log_folder   => '/var/local/sonar/logs',
-      updatecenter => 'true',
-      http_proxy   => {
+      arch          => 'linux-x86-64',
+      version       => '5.1,
+      user          => 'sonar',
+      group         => 'sonar',
+      service       => 'sonar',
+      installroot   => '/usr/local',
+      home          => '/var/local/sonar',
+      download_url  => 'http://dist.sonar.codehaus.org',
+      jdbc          => $jdbc,
+      web_java_opts => '-Xmx1024m',
+      log_folder    => '/var/local/sonar/logs',
+      updatecenter  => 'true',
+      http_proxy    => {
       	host        => 'proxy.example.com',
       	port        => '8080',
       	ntlm_domain => '',
