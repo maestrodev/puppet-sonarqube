@@ -104,6 +104,22 @@ sonar.web.https.keystoreType=<%= @https['keystoretype'] %>
 # sonar.web.https.keystoreType=
 <% end -%>
 
+#--------------------------------------------------------------------------------------------------
+# ELASTICSEARCH
+# Elasticsearch is used to facilitate fast and accurate information retrieval.
+# It is executed in a dedicated Java process.
+
+# JVM options of Elasticsearch process
+#    Recommendations:
+#
+#    Use HotSpot Server VM. The property -server should be added if server mode
+#    is not enabled by default on your environment: http://docs.oracle.com/javase/7/docs/technotes/guides/vm/server-class.html
+#
+#    Set min and max memory (respectively -Xms and -Xmx) to the same value to prevent heap
+#    from resizing at runtime.
+#
+<% if @search_java_opts -%>
+sonar.search.javaOpts=<%= @search_java_opts %>
 <% end -%>
 
 #-----------------------------------------------------------------------
