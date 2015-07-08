@@ -25,6 +25,7 @@ class sonarqube (
   $download_url  = 'http://dist.sonar.codehaus.org',
   $context_path  = '/',
   $arch          = $sonarqube::params::arch,
+  $https         = {},
   $ldap          = {},
   $crowd         = {},
   $jdbc          = {
