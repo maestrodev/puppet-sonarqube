@@ -1,6 +1,6 @@
 {
   "name": "maestrodev-sonarqube",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "author": "maestrodev",
   "summary": "SonarQube installation and configuration",
   "license": "Apache License, Version 2.0",
