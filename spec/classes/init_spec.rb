@@ -4,14 +4,9 @@ describe 'sonarqube' do
 
   let(:sonar_properties) { '/usr/local/sonar/conf/sonar.properties' }
 
-  context "when installing version 3", :compile do
-    let(:params) {{ :version => '3.7.4' }}
-    it { should contain_wget__fetch('download-sonar').with_source('http://downloads.sonarsource.com/sonarqube/sonar-3.7.4.zip') }
-  end
-
   context "when installing version 4", :compile do
-    let(:params) {{ :version => '4.1.2' }}
-    it { should contain_wget__fetch('download-sonar').with_source('http://downloads.sonarsource.com/sonarqube/sonarqube-4.1.2.zip') }
+    let(:params) {{ :version => '4.5.4' }}
+    it { should contain_wget__fetch('download-sonar').with_source('http://downloads.sonarsource.com/sonarqube/sonarqube-4.5.4.zip') }
   end
 
   context "when crowd configuration is supplied", :compile do

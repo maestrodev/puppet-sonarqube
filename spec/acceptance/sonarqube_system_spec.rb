@@ -31,7 +31,7 @@ describe 'sonarqube' do
   end
 
   context 'when installing version 4' do
-    let(:version) { '4.1.2' }
+    let(:version) { '4.5.4' }
 
     it_should_behave_like :sonar
 
@@ -55,16 +55,6 @@ describe 'sonarqube' do
 
       it { file("#{installroot}/conf/sonar.properties").content.should match(%r{^sonar.security.localUsers=foo,bar}) }
     end
-  end
-
-  context 'when installing version 3' do
-    let(:version) { '3.7.4' }
-
-    before(:all) do
-      on(hosts, "service sonar stop && rm -rf /etc/init.d/sonar* #{installroot}* #{home}*")
-    end
-
-    it_should_behave_like :sonar
   end
 
 end
