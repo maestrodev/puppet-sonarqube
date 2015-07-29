@@ -52,12 +52,7 @@ class sonarqube (
   # wget from https://github.com/maestrodev/puppet-wget
   include wget
 
-  if versioncmp($version, '4.0') < 0 {
-    $package_name = 'sonar'
-  }
-  else {
-    $package_name = 'sonarqube'
-  }
+  $package_name = 'sonarqube'
 
   if $home != undef {
     $real_home = $home
