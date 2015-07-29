@@ -6,10 +6,6 @@
 #
 # See also the file conf/wrapper.conf for JVM advanced settings
 #---------------------------------------------------------
-<%if @javaopts -%>
-sonar.web.javaOpts:                         <%= @javaopts %>
-<% end -%>
-#---------------------------------------------------------
 # WEB SETTINGS - STANDALONE MODE ONLY
 # These settings are ignored when the war file is deployed to a JEE server.
 #---------------------------------------------------------
