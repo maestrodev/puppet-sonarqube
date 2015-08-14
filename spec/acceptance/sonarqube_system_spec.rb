@@ -31,7 +31,7 @@ describe 'sonarqube' do
   end
 
   context 'when installing version 4' do
-    let(:version) { '4.5.4' }
+    let(:version) { '4.5.5' }
 
     it_should_behave_like :sonar
 
