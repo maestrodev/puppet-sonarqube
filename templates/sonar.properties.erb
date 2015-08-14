@@ -125,7 +125,7 @@ sonar.search.javaOpts=<%= @search_java_opts %>
 #-----------------------------------------------------------------------
 # DATABASE
 #
-# IMPORTANT : the embedded database Derby is used by default. 
+# IMPORTANT : the embedded database Derby is used by default.
 # It is recommended for tests only. Please use an external database
 # for production environment (MySQL, Oracle, Postgresql, SQLServer)
 #
@@ -291,6 +291,14 @@ ldap.group.request=<%= @ldap['group_request'] %>
 <% end -%>
 <% if @ldap['group_id_attribute'] -%>
 ldap.group.idAttribute=<%= @ldap['group_id_attribute'] %>
+<% end -%>
+
+<% elsif !@pam.empty? -%>
+
+# PAM authentication
+sonar.security.realm: PAM
+<% if @pam['serviceName'] -%>
+pam.serviceName=<%= @pam['serviceName'] %>
 <% end -%>
 
 <% end -%>

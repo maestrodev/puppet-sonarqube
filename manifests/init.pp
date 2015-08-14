@@ -27,6 +27,8 @@ class sonarqube (
   $arch             = $sonarqube::params::arch,
   $https            = {},
   $ldap             = {},
+  # ldap and pam are mutually exclusive. Setting $ldap will annihilate the setting of $pam
+  $pam              = {},
   $crowd            = {},
   $jdbc             = {
     url      => 'jdbc:h2:tcp://localhost:9092/sonar',
@@ -164,6 +166,15 @@ class sonarqube (
     },
     artifactid => 'sonar-ldap-plugin',
     version    => '1.4',
+  }
+
+  sonarqube::plugin { 'sonar-pam-plugin' :
+    ensure     => empty($pam) ? {
+      true  => absent,
+      false => present
+    },
+    artifactid => 'sonar-pam-plugin',
+    version    => '0.2',
   }
 
   sonarqube::plugin { 'sonar-crowd-plugin' :
