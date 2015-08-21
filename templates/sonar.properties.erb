@@ -136,12 +136,9 @@ sonar.search.javaOpts=<%= @search_java_opts %>
 #----- Credentials
 # Permissions to create tables and indexes must be granted to JDBC user.
 # The schema must be created first.
-sonar.jdbc.username:                       <%= @jdbc['username'] %>
-sonar.jdbc.password:                       <%= @jdbc['password'] %>
-
-sonar.jdbc.url:                            <%= @jdbc['url'] %>
-sonar.jdbc.driverClassName:                <%= @jdbc['driver_class_name'] %>
-sonar.jdbc.validationQuery:                <%= @jdbc['validation_query'] %>
+sonar.jdbc.url:         <%= @jdbc['url'] %>
+sonar.jdbc.username:    <%= @jdbc['username'] %>
+sonar.jdbc.password:    <%= @jdbc['password'] %>
 
 #----- Embedded database H2
 # Note : it does not accept connections from remote hosts, so the
@@ -195,7 +192,7 @@ sonar.jdbc.validationQuery:                <%= @jdbc['validation_query'] %>
 
 
 #----- Connection pool settings
-sonar.jdbc.maxActive:                      20
+sonar.jdbc.maxActive:                      <%= @jdbc_properties['max_active'] %>
 sonar.jdbc.maxIdle:                        5
 sonar.jdbc.minIdle:                        2
 sonar.jdbc.maxWait:                        5000
