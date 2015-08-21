@@ -136,12 +136,9 @@ sonar.search.javaOpts=<%= @search_java_opts %>
 #----- Credentials
 # Permissions to create tables and indexes must be granted to JDBC user.
 # The schema must be created first.
-sonar.jdbc.username:                       <%= @jdbc['username'] %>
-sonar.jdbc.password:                       <%= @jdbc['password'] %>
-
-sonar.jdbc.url:                            <%= @jdbc['url'] %>
-sonar.jdbc.driverClassName:                <%= @jdbc['driver_class_name'] %>
-sonar.jdbc.validationQuery:                <%= @jdbc['validation_query'] %>
+sonar.jdbc.url:         <%= @jdbc['url'] %>
+sonar.jdbc.username:    <%= @jdbc['username'] %>
+sonar.jdbc.password:    <%= @jdbc['password'] %>
 
 #----- Embedded database H2
 # Note : it does not accept connections from remote hosts, so the
@@ -195,12 +192,13 @@ sonar.jdbc.validationQuery:                <%= @jdbc['validation_query'] %>
 
 
 #----- Connection pool settings
-sonar.jdbc.maxActive:                      20
-sonar.jdbc.maxIdle:                        5
-sonar.jdbc.minIdle:                        2
-sonar.jdbc.maxWait:                        5000
-sonar.jdbc.minEvictableIdleTimeMillis:     600000
-sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
+
+sonar.jdbc.maxActive:                      <%= @jdbc['max_active'] %>
+sonar.jdbc.maxIdle:                        <%= @jdbc['max_idle'] %>
+sonar.jdbc.minIdle:                        <%= @jdbc['min_idle'] %>
+sonar.jdbc.maxWait:                        <%= @jdbc['max_wait'] %>
+sonar.jdbc.minEvictableIdleTimeMillis:     <%= @jdbc['min_evictable_idle_time_millis'] %>
+sonar.jdbc.timeBetweenEvictionRunsMillis:  <%= @jdbc['time_between_eviction_runs_millis'] %>
 
 <% end -%>
 
