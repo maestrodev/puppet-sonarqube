@@ -192,13 +192,12 @@ sonar.jdbc.password:    <%= @jdbc['password'] %>
 
 
 #----- Connection pool settings
-
-sonar.jdbc.maxActive:                      <%= @jdbc['max_active'] %>
-sonar.jdbc.maxIdle:                        <%= @jdbc['max_idle'] %>
-sonar.jdbc.minIdle:                        <%= @jdbc['min_idle'] %>
-sonar.jdbc.maxWait:                        <%= @jdbc['max_wait'] %>
-sonar.jdbc.minEvictableIdleTimeMillis:     <%= @jdbc['min_evictable_idle_time_millis'] %>
-sonar.jdbc.timeBetweenEvictionRunsMillis:  <%= @jdbc['time_between_eviction_runs_millis'] %>
+sonar.jdbc.maxActive:                      <% if @jdbc['max_active'] %><%= @jdbc['max_active'] %><% else %>50<% end %>
+sonar.jdbc.maxIdle:                        <% if @jdbc['max_idle'] %><%= @jdbc['max_idle'] %><% else %>5<% end %>
+sonar.jdbc.minIdle:                        <% if @jdbc['min_idle'] %><%= @jdbc['min_idle'] %><% else %>2<% end %>
+sonar.jdbc.maxWait:                        <% if @jdbc['max_wait'] %><%= @jdbc['max_wait'] %><% else %>5000<% end %>
+sonar.jdbc.minEvictableIdleTimeMillis:     <% if @jdbc['min_evictable_idle_time_millis'] %><%= @jdbc['min_evictable_idle_time_millis'] %><% else %>600000<% end %>
+sonar.jdbc.timeBetweenEvictionRunsMillis:  <% if @jdbc['time_between_eviction_runs_millis'] %><%= @jdbc['time_between_eviction_runs_millis'] %><% else %>30000<% end %>
 
 <% end -%>
 
