@@ -1,6 +1,6 @@
 #! /bin/sh
 
-cd $1
+pushd $1
 for file in $(ls | grep $2)
 do
   if [ "$file" != "$2-$3.jar" ]
@@ -8,3 +8,4 @@ do
       rm -f "$file"
   fi
 done
+popd
