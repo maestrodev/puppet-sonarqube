@@ -1,0 +1,11 @@
+#! /bin/sh
+
+pushd $1
+for file in $(ls | grep $2)
+do
+  if [ "$file" != "$2-$3.jar" ]
+  then
+      rm -f "$file"
+  fi
+done
+popd
