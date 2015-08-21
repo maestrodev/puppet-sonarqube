@@ -163,7 +163,7 @@ class sonarqube (
     mode    => '0755',
   }
   ->
-  exec { "remove-old-versions-of-sonarqube":
+  exec { 'remove-old-versions-of-sonarqube':
     command => "/tmp/cleanup-old-sonarqube-versions.sh ${installroot} ${version}",
     path    => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin',
   }
