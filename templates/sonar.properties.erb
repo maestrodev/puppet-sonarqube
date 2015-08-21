@@ -192,12 +192,13 @@ sonar.jdbc.password:    <%= @jdbc['password'] %>
 
 
 #----- Connection pool settings
-sonar.jdbc.maxActive:                      <%= @jdbc_properties['max_active'] %>
-sonar.jdbc.maxIdle:                        5
-sonar.jdbc.minIdle:                        2
-sonar.jdbc.maxWait:                        5000
-sonar.jdbc.minEvictableIdleTimeMillis:     600000
-sonar.jdbc.timeBetweenEvictionRunsMillis:  30000
+
+sonar.jdbc.maxActive:                      <%= @jdbc['max_active'] %>
+sonar.jdbc.maxIdle:                        <%= @jdbc['max_idle'] %>
+sonar.jdbc.minIdle:                        <%= @jdbc['min_idle'] %>
+sonar.jdbc.maxWait:                        <%= @jdbc['max_wait'] %>
+sonar.jdbc.minEvictableIdleTimeMillis:     <%= @jdbc['min_evictable_idle_time_millis'] %>
+sonar.jdbc.timeBetweenEvictionRunsMillis:  <%= @jdbc['time_between_eviction_runs_millis'] %>
 
 <% end -%>
 
