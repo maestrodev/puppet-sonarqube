@@ -36,8 +36,9 @@ define sonarqube::plugin(
       before     => File[$plugin],
       require    => File[$sonarqube::plugin_dir],
     }
+    ->
     exec { "remove-old-versions-of-${artifactid}":
-      command => "rm -f ${sonarqube::plugin_dir}/${artifactid}*.jar",
+      command => "/tmp/cleanup-old-plugin-versions.sh ${sonarqube::plugin_dir} ${artifactid} ${version}",
       path    => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin',
     }
     ->

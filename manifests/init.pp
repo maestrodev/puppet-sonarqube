@@ -119,7 +119,7 @@ class sonarqube (
   sonarqube::move_to_home { 'extensions': } ->
   sonarqube::move_to_home { 'logs': } ->
 
-  # ===== Install Sonar =====
+  # ===== Install SonarQube =====
 
   exec { 'untar':
     command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/${package_name}-${version} && chown -R ${user}:${group} ${real_home}",
@@ -151,6 +151,21 @@ class sonarqube (
       notify  => Service['sonarqube'],
       mode    => '0600'
     }
+  }
+
+  file { '/tmp/cleanup-old-plugin-versions.sh':
+    content => template("${module_name}/cleanup-old-plugin-versions.sh.erb"),
+    mode    => '0755',
+  }
+  ->
+  file { '/tmp/cleanup-old-sonarqube-versions.sh':
+    content => template("${module_name}/cleanup-old-sonarqube-versions.sh.erb"),
+    mode    => '0755',
+  }
+  ->
+  exec { "remove-old-versions-of-sonarqube":
+    command => "/tmp/cleanup-old-sonarqube-versions.sh ${installroot} ${version}",
+    path    => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin',
   }
 
   # The plugins directory. Useful to later reference it from the plugin definition

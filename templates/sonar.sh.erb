@@ -20,8 +20,8 @@
 #-----------------------------------------------------------------------------
 # These settings can be modified to fit the needs of your application
 
-# Default values for the Application variables, below. 
-# 
+# Default values for the Application variables, below.
+#
 # NOTE: The build for specific applications may override this during the resource-copying
 # phase, to fill in a concrete name and avoid the use of the defaults specified here.
 DEF_APP_NAME="sonar"
@@ -313,7 +313,7 @@ checkUser() {
                 exit 1
             fi
         fi
-    
+
         if [ "`$IDEXE -u -n`" = "$RUN_AS_USER" ]
         then
             # Already running as the configured user.  Avoid password prompts by not calling su.
@@ -330,7 +330,7 @@ checkUser() {
         then
             if [ "X$1" != "X" ]
             then
-                # Resolve the primary group 
+                # Resolve the primary group
                 RUN_AS_GROUP=`groups $RUN_AS_USER | awk '{print $3}' | tail -1`
                 if [ "X$RUN_AS_GROUP" = "X" ]
                 then
@@ -416,7 +416,7 @@ console() {
         exit 1
     fi
 }
- 
+
 start() {
     echo "Starting $APP_LONG_NAME..."
     getpid
@@ -435,9 +435,9 @@ start() {
         echo "Started $APP_LONG_NAME."
     else
         echo "Failed to start $APP_LONG_NAME."
-    fi    
+    fi
 }
- 
+
 stopit() {
     echo "Stopping $APP_LONG_NAME..."
     getpid

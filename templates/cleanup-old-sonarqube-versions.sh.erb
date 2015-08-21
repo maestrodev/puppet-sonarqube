@@ -1,0 +1,10 @@
+#! /bin/sh
+
+cd $1
+for directory in $(ls | grep "sonarqube-")
+do
+  if [ "$directory" != "sonarqube-$2" ]
+  then
+      rm -rf "$directory"
+  fi
+done
