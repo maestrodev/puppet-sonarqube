@@ -23,6 +23,7 @@ class sonarqube (
   $port             = 9000,
   $portAjp          = -1,
   $download_url     = 'http://downloads.sonarsource.com/sonarqube',
+  $download_dir     = '/usr/local/src',
   $context_path     = '/',
   $arch             = $sonarqube::params::arch,
   $https            = {},
@@ -49,6 +50,7 @@ class sonarqube (
   $search_java_opts = undef,
   $config           = undef,
 ) inherits sonarqube::params {
+  validate_absolute_path($download_dir)
   Exec {
     path => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin'
   }
@@ -76,7 +78,7 @@ class sonarqube (
   $plugin_dir = "${extensions_dir}/plugins"
 
   $installdir = "${installroot}/${service}"
-  $tmpzip = "/usr/local/src/${package_name}-${version}.zip"
+  $tmpzip = "${download_dir}/${package_name}-${version}.zip"
   $script = "${installdir}/bin/${arch}/sonar.sh"
 
   if ! defined(Package[unzip]) {
