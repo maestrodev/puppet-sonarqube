@@ -1,6 +1,6 @@
 #! /bin/sh
 
-pushd $1
+cd $1
 for directory in $(ls | grep "sonarqube-")
 do
   if [ "$directory" != "sonarqube-$2" ]
@@ -8,4 +8,3 @@ do
       rm -rf "$directory"
   fi
 done
-popd
