@@ -28,10 +28,11 @@ class sonarqube::runner (
     installroot  => $installroot,
   } ->
   class { '::sonarqube::runner::config':
-    package_name => $package_name,
-    version      => $version,
-    installroot  => $installroot,
-    jdbc         => $jdbc,
+    package_name     => $package_name,
+    version          => $version,
+    installroot      => $installroot,
+    jdbc             => $jdbc,
+    sonarqube_server => $sonarqube_server,
   } ~>
   anchor { 'sonarqube::runner::end': }
 }
