@@ -3,6 +3,7 @@ class sonarqube::runner::config (
   $package_name,
   $version,
   $installroot,
+  $sonarqube_server = 'http://localhost:9000',
   $jdbc             = {
     url      => 'jdbc:h2:tcp://localhost:9092/sonar',
     username => 'sonar',
