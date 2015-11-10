@@ -22,6 +22,7 @@ class sonarqube (
   $host             = undef,
   $port             = 9000,
   $portAjp          = -1,
+  # For version greater or equals to 5.2, $download_url must be set to 'https://sonarsource.bintray.com/Distribution/sonarqube'
   $download_url     = 'http://downloads.sonarsource.com/sonarqube',
   $download_dir     = '/usr/local/src',
   $context_path     = '/',
