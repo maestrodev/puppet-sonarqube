@@ -122,6 +122,18 @@ sonar.web.https.keystoreType=<%= @https['keystoretype'] %>
 sonar.search.javaOpts=<%= @search_java_opts %>
 <% end -%>
 
+<% if @search_port -%>
+sonar.search.port=<%= @search_port %>
+<% else -%>
+#sonar.search.port=9001
+<% end -%>
+
+<% if @search_host -%>
+sonar.search.host=<%= @search_host %>
+<% else -%>
+sonar.search.host=127.0.0.1
+<% end -%>
+
 #-----------------------------------------------------------------------
 # DATABASE
 #
