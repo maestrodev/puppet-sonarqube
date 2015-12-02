@@ -6,7 +6,7 @@ describe 'sonarqube' do
 
   context "when installing version 4", :compile do
     let(:params) {{ :version => '4.5.5' }}
-    it { should contain_wget__fetch('download-sonar').with_source('http://downloads.sonarsource.com/sonarqube/sonarqube-4.5.5.zip') }
+    it { should contain_wget__fetch('download-sonar').with_source('https://sonarsource.bintray.com/Distribution/sonarqube/sonarqube-4.5.5.zip') }
   end
 
   context "when crowd configuration is supplied", :compile do
