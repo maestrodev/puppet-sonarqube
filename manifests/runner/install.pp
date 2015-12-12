@@ -10,7 +10,7 @@ class sonarqube::runner::install (
   if ! defined(Package[unzip]) {
     package { 'unzip':
       ensure => present,
-      before => Exec[unzip-sonar-runner]
+      before => Exec[unzip-sonar-runner],
     }
   }
 
@@ -38,10 +38,10 @@ class sonarqube::runner::install (
 
   # Sonar settings for terminal sessions.
   file { '/etc/profile.d/sonarhome.sh':
-    content => 'export SONAR_RUNNER_HOME=/usr/local/sonar-runner'
+    content => 'export SONAR_RUNNER_HOME=/usr/local/sonar-runner',
   }
   file { '/usr/bin/sonar-runner':
-    ensure => 'link',
+    ensure => link,
     target => '/var/lib/sonar-runner/bin/sonar-runner',
   }
 }

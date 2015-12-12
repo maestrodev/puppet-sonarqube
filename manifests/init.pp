@@ -54,11 +54,11 @@ class sonarqube (
 ) inherits sonarqube::params {
   validate_absolute_path($download_dir)
   Exec {
-    path => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin'
+    path => '/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/bin',
   }
   File {
     owner => $user,
-    group => $group
+    group => $group,
   }
 
   # wget from https://github.com/maestrodev/puppet-wget
@@ -68,8 +68,7 @@ class sonarqube (
 
   if $home != undef {
     $real_home = $home
-  }
-  else {
+  } else {
     $real_home = '/var/local/sonar'
   }
   Sonarqube::Move_to_home {
@@ -86,7 +85,7 @@ class sonarqube (
   if ! defined(Package[unzip]) {
     package { 'unzip':
       ensure => present,
-      before => Exec[untar]
+      before => Exec[untar],
     }
   }
 
@@ -95,18 +94,18 @@ class sonarqube (
     home       => $real_home,
     managehome => false,
     system     => $user_system,
-  } ->
+  }
+  ->
   group { $group:
     ensure => present,
     system => $user_system,
-  } ->
-  wget::fetch {
-    'download-sonar':
-      source      => "${download_url}/${package_name}-${version}.zip",
-      destination => $tmpzip,
-  } ->
-
-
+  }
+  ->
+  wget::fetch { 'download-sonar':
+    source      => "${download_url}/${package_name}-${version}.zip",
+    destination => $tmpzip,
+  }
+  ->
   # ===== Create folder structure =====
   # so uncompressing new sonar versions at update time use the previous sonar home,
   # installing new extensions and plugins over the old ones, reusing the db,...
@@ -115,31 +114,38 @@ class sonarqube (
   file { $real_home:
     ensure => directory,
     mode   => '0700',
-  } ->
+  }
+  ->
   file { "${installroot}/${package_name}-${version}":
     ensure => directory,
-  } ->
+  }
+  ->
   file { $installdir:
     ensure => link,
     target => "${installroot}/${package_name}-${version}",
     notify => Service['sonarqube'],
-  } ->
-  sonarqube::move_to_home { 'data': } ->
-  sonarqube::move_to_home { 'extras': } ->
-  sonarqube::move_to_home { 'extensions': } ->
-  sonarqube::move_to_home { 'logs': } ->
-
+  }
+  ->
+  sonarqube::move_to_home { 'data': }
+  ->
+  sonarqube::move_to_home { 'extras': }
+  ->
+  sonarqube::move_to_home { 'extensions': }
+  ->
+  sonarqube::move_to_home { 'logs': }
+  ->
   # ===== Install SonarQube =====
-
   exec { 'untar':
     command => "unzip -o ${tmpzip} -d ${installroot} && chown -R ${user}:${group} ${installroot}/${package_name}-${version} && chown -R ${user}:${group} ${real_home}",
     creates => "${installroot}/${package_name}-${version}/bin",
     notify  => Service['sonarqube'],
-  } ->
+  }
+  ->
   file { $script:
     mode    => '0755',
     content => template('sonarqube/sonar.sh.erb'),
-  } ->
+  }
+  ->
   file { "/etc/init.d/${service}":
     ensure => link,
     target => $script,
@@ -151,15 +157,14 @@ class sonarqube (
       source  => $config,
       require => Exec['untar'],
       notify  => Service['sonarqube'],
-      mode    => '0600'
+      mode    => '0600',
     }
-  }
-  else {
+  } else {
     file { "${installdir}/conf/sonar.properties":
       content => template('sonarqube/sonar.properties.erb'),
       require => Exec['untar'],
       notify  => Service['sonarqube'],
-      mode    => '0600'
+      mode    => '0600',
     }
   }
 
@@ -189,7 +194,7 @@ class sonarqube (
   sonarqube::plugin { 'sonar-ldap-plugin' :
     ensure     => empty($ldap) ? {
       true  => absent,
-      false => present
+      false => present,
     },
     artifactid => 'sonar-ldap-plugin',
     version    => '1.4',
@@ -198,7 +203,7 @@ class sonarqube (
   sonarqube::plugin { 'sonar-pam-plugin' :
     ensure     => empty($pam) ? {
       true  => absent,
-      false => present
+      false => present,
     },
     artifactid => 'sonar-pam-plugin',
     version    => '0.2',
@@ -207,7 +212,7 @@ class sonarqube (
   sonarqube::plugin { 'sonar-crowd-plugin' :
     ensure     => empty($crowd) ? {
       true  => absent,
-      false => present
+      false => present,
     },
     artifactid => 'sonar-crowd-plugin',
     version    => '1.0',
