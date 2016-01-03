@@ -190,34 +190,6 @@ class sonarqube (
     ensure => directory,
   }
 
-  # For convenience, provide "built-in" support for the Sonar LDAP plugin.
-  sonarqube::plugin { 'sonar-ldap-plugin' :
-    ensure     => empty($ldap) ? {
-      true  => absent,
-      false => present,
-    },
-    artifactid => 'sonar-ldap-plugin',
-    version    => '1.4',
-  }
-
-  sonarqube::plugin { 'sonar-pam-plugin' :
-    ensure     => empty($pam) ? {
-      true  => absent,
-      false => present,
-    },
-    artifactid => 'sonar-pam-plugin',
-    version    => '0.2',
-  }
-
-  sonarqube::plugin { 'sonar-crowd-plugin' :
-    ensure     => empty($crowd) ? {
-      true  => absent,
-      false => present,
-    },
-    artifactid => 'sonar-crowd-plugin',
-    version    => '1.0',
-  }
-
   service { 'sonarqube':
     ensure     => running,
     name       => $service,

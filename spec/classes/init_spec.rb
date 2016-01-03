@@ -16,8 +16,6 @@ describe 'sonarqube' do
       'password'    => 'crowdpassword',
     } } }
 
-    it { should contain_sonarqube__plugin('sonar-crowd-plugin').with_ensure('present') }
-
     it 'should generate sonar.properties config for crowd' do
       should contain_file(sonar_properties).with_content(%r[sonar\.authenticator\.class: org\.sonar\.plugins\.crowd\.CrowdAuthenticator])
       should contain_file(sonar_properties).with_content(%r[crowd\.url: crowdserviceurl])
@@ -27,7 +25,6 @@ describe 'sonarqube' do
   end
 
   context "when no crowd configuration is supplied", :compile do
-    it { should contain_sonarqube__plugin('sonar-crowd-plugin').with_ensure('absent') }
     it { should contain_file(sonar_properties).without_content("crowd") }
   end
 
@@ -50,7 +47,6 @@ describe 'sonarqube' do
       'local_users'  => 'foo',
     } } }
 
-    it { should contain_sonarqube__plugin('sonar-ldap-plugin').with_ensure('present')}
     it { should contain_file(sonar_properties).with_content(/sonar.security.localUsers=foo/) }
     it { should contain_file(sonar_properties).with_content(/sonar.security.realm=LDAP/) }
     it { should contain_file(sonar_properties).with_content(/ldap.url=ldap:\/\/myserver.mycompany.com/) }
@@ -64,7 +60,6 @@ describe 'sonarqube' do
       'local_users' => ['foo','bar'],
     } } }
 
-    it { should contain_sonarqube__plugin('sonar-ldap-plugin').with_ensure('present')}
     it { should contain_file(sonar_properties).with_content(/sonar.security.localUsers=foo,bar/) }
     it { should contain_file(sonar_properties).with_content(/sonar.security.realm=LDAP/) }
     it { should contain_file(sonar_properties).with_content(/ldap.url=ldap:\/\/myserver.mycompany.com/) }
@@ -76,7 +71,6 @@ describe 'sonarqube' do
       'url'          => 'ldap://myserver.mycompany.com',
       'user_base_dn' => 'ou=Users,dc=mycompany,dc=com',
     } } }
-    it { should contain_sonarqube__plugin('sonar-ldap-plugin').with_ensure('present')}
     it { should contain_file(sonar_properties).without_content(/sonar.security.localUsers/) }
     it { should contain_file(sonar_properties).with_content(/sonar.security.realm=LDAP/) }
     it { should contain_file(sonar_properties).with_content(/ldap.url=ldap:\/\/myserver.mycompany.com/) }
@@ -84,7 +78,6 @@ describe 'sonarqube' do
   end
 
   context "when no ldap configuration is supplied", :compile do
-    it { should contain_sonarqube__plugin('sonar-ldap-plugin').with_ensure('absent')}
     it { should contain_file(sonar_properties).without_content(/sonar.security/) }
     it { should contain_file(sonar_properties).without_content(/ldap./) }
   end
