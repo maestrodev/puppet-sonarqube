@@ -55,10 +55,10 @@ The `sonarqube::plugin` defined type can be used to install SonarQube plugins. N
     ->
     class { 'sonarqube': }
     
-    sonarqube::plugin { 'sonar-twitter-plugin':
-      groupid    => 'org.codehaus.sonar-plugins',
-      artifactid => 'sonar-twitter-plugin',
-      version    => '0.1',
+    sonarqube::plugin { 'sonar-javascript-plugin':
+      groupid    => 'org.sonarsource.javascript',
+      artifactid => 'sonar-javascript-plugin',
+      version    => '2.10',
       notify     => Service['sonar'],
     }
     
