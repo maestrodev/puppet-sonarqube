@@ -12,7 +12,7 @@ A puppet recipe to install SonarQube (former Sonar)
 # Usage
 
     class { 'java': }
-    class { 'sonarqube' :
+    class { 'sonarqube':
       version => '5.1',
     }
 
@@ -24,7 +24,7 @@ or
       password => 'sonar',
     }
 
-    class { 'sonarqube' :
+    class { 'sonarqube':
       arch          => 'linux-x86-64',
       version       => '5.1,
       user          => 'sonar',
@@ -48,14 +48,14 @@ or
 
 ## SonarQube Plugins
 
-The `sonarqube::plugin` defined type can also be used to install SonarQube plugins. Note that Maven is required to download the plugins then.
+The `sonarqube::plugin` defined type can be used to install SonarQube plugins. Note that Maven is required to download the plugins then.
 
     class { 'java': }
-    class { 'maven::maven' : }
+    class { 'maven::maven': }
     ->
-    class { 'sonarqube' : }
+    class { 'sonarqube': }
     
-    sonarqube::plugin { 'sonar-twitter-plugin' :
+    sonarqube::plugin { 'sonar-twitter-plugin':
       groupid    => 'org.codehaus.sonar-plugins',
       artifactid => 'sonar-twitter-plugin',
       version    => '0.1',
@@ -63,9 +63,9 @@ The `sonarqube::plugin` defined type can also be used to install SonarQube plugi
     }
     
 
-### LDAP Plugin
+## Security Configuration
 
-The `sonarqube` class actually includes "built-in" support for the LDAP plugin to make it easier to use, e.g.:
+The `sonarqube` class provides an easy way to configure security with LDAP, Crowd or PAM. Here's an example with LDAP:
 
     $ldap = {
       url          => 'ldap://myserver.mycompany.com',
@@ -74,10 +74,19 @@ The `sonarqube` class actually includes "built-in" support for the LDAP plugin t
     }
 
     class { 'java': }
-    class { 'maven::maven' : }
+    class { 'maven::maven': }
     ->
-    class { 'sonarqube' :
+    class { 'sonarqube':
       ldap => $ldap,
+    }
+
+    # Do not forget to add the SonarQube LDAP plugin that is not provided out of the box.
+    # Same thing with Crowd or PAM.
+    sonarqube::plugin { 'sonar-ldap-plugin':
+      groupid    => 'org.sonarsource.ldap',
+      artifactid => 'sonar-ldap-plugin',
+      version    => '1.5.1',
+      notify     => Service['sonar'],
     }
 
 
